@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose"
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2"
 
 const tripSchema = new Schema({
 
@@ -90,5 +91,7 @@ const tripSchema = new Schema({
     }
 
 }, { timestamps: true })
+
+tripSchema.plugin(mongooseAggregatePaginate)
 
 export const Trip =  mongoose.model("Trip", tripSchema)
