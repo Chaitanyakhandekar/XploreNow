@@ -103,8 +103,31 @@ const loginUser = asyncHandler(async (req,res)=>{
 
 })
 
+const logoutUser = asyncHandler(async (req,res)=>{
+
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+        throw new ApiError(400,"User not Found")
+    }
+
+    user.refreshToken = undefined
+
+    user.save({validateBeforeSave:false})
+
+    return res
+            .status(200)
+            .clearCookie("accessToken" , {...httpOnlyCookie, sameSite:"Strict"})
+            .clearCookie("refreshToken" , {...httpOnlyCookie, sameSite:"Strict"})
+            .json(
+                new ApiResponse(200,"Logout Successfull")
+            )
+
+})
+
 
 export {
     registerUser,
-    loginUser
+    loginUser,
+    logoutUser
 }
