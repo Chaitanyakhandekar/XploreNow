@@ -103,7 +103,7 @@ const loginUser = asyncHandler(async (req,res)=>{
 
 })
 
-const logoutUser = asyncHandler(async (req,res)=>{
+const logoutUser = asyncHandler(async (req,res)=>{      // verifyJWT middleware
 
     const user = await User.findById(req.user._id)
 
@@ -125,9 +125,52 @@ const logoutUser = asyncHandler(async (req,res)=>{
 
 })
 
+const updateProfile = asyncHandler(async (req,res)=>{      // verifyJWT middleware
 
+    const {username,fullName} = req.body
+
+    if(!(username || fullName)){
+        throw new ApiError(400,"Atleast one Field is Required")
+    }
+
+    if((username && username.trim() === "") || (fullName && fullName.trim() === "")){
+        throw new ApiError(400,"Field for Update Cannot be Empty")
+    }
+
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+        throw new ApiError(400,"User not found")
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set:{
+                username:username || user.username,
+                fullName:fullName || user.fullName
+            }
+        },
+        {
+            new:true
+        }
+    ).select("-password -refreshToken -phone")
+
+    if(!updatedUser){
+        throw new ApiError(500,"Server Error")
+    }
+
+    return res
+            .status(200)
+            .json(
+                new ApiResponse(200,updatedUser,"User Profile Updated Successfully")
+            )
+   
+            
+})
 export {
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    updateProfile
 }
