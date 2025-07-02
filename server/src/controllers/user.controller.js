@@ -113,7 +113,7 @@ const logoutUser = asyncHandler(async (req,res)=>{
 
     user.refreshToken = undefined
 
-    user.save({validateBeforeSave:false})
+    await user.save({validateBeforeSave:false})
 
     return res
             .status(200)
