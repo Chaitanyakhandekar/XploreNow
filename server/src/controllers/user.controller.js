@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv"
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js"
 import { ApiResponse } from "../utils/apiResponse.js"
@@ -6,6 +7,7 @@ import { uploadFileOnCloudinary } from "../utils/cloudinary.js"
 import { User } from "../models/user.model.js"
 import { generateAccessAndRefreshToken } from "../utils/generateAccessAndRefreshToken.js"
 import { httpOnlyCookie } from "../constants.js";
+import jwt from "jsonwebtoken"
 
 
 
@@ -243,11 +245,58 @@ const updatePassword = asyncHandler(async (req,res)=>{      // verifyJWT middlew
             )
 })
 
+const refreshAccessToken = asyncHandler(async (req,res)=>{
+
+    const encodedRefreshToken = req.cookies?.refreshToken
+
+    if(!encodedRefreshToken || encodedRefreshToken.trim() === ""){
+        throw new ApiError(500,"Server Error")
+    }
+
+    let decodedRefreshToken;
+
+    try {
+         decodedRefreshToken = jwt.verify(encodedRefreshToken,process.env.REFRESH_TOKEN_SECRET)
+    } catch (error) {
+        throw new ApiError(500,"Invalid or expired refresh token")
+    }
+
+    if(!decodedRefreshToken){
+        throw new ApiError(500,"Server error")
+    }
+
+    const user = await User.findById(decodedRefreshToken._id)
+
+    if(!user){
+        throw new ApiError(500,"User not found")
+    }
+
+    const {accessToken,refreshToken} = await generateAccessAndRefreshToken(user._id)
+
+    if(!(accessToken && refreshToken)){
+        throw new ApiError(500,"Server Error")
+    }
+
+    if(user.refreshToken !== encodedRefreshToken){
+        throw new ApiError(500,"Refresh token is invalid or has been rotated")
+    }
+
+    return res
+            .status(200)
+            .cookie("accessToken",accessToken,{...httpOnlyCookie , sameSite:"Strict"})
+            .cookie("refreshToken",refreshToken,{...httpOnlyCookie , sameSite:"Strict"})
+            .json(
+                new ApiResponse(200,null,"AccessToken Refreshed Successfully")
+            )
+
+})
+
 export {
     registerUser,
     loginUser,
     logoutUser,
     updateProfile,
     updateAvatar,
-    updatePassword
+    updatePassword,
+    refreshAccessToken
 }
