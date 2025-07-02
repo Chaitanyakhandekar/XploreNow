@@ -1,2 +1,2 @@
-1 create account on cloudinary
-2 replace env var with actual clodinary var
+default avatar =     url: 'http://res.cloudinary.com/drftighpf/image/upload/v1751458090/f5ozv63h6ek3ujulc3gg.jpg',
+                    secure_url: 'https://res.cloudinary.com/drftighpf/image/upload/v1751458090/f5ozv63h6ek3ujulc3gg.jpg',
