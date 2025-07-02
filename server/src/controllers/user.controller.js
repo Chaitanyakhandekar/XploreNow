@@ -204,10 +204,50 @@ const updateAvatar = asyncHandler(async (req,res)=>{        // verifyJWT , multe
 
 })
 
+const updatePassword = asyncHandler(async (req,res)=>{      // verifyJWT middleware
+
+    const {currentPassword,newPassword} = req.body
+
+    if(!(currentPassword && newPassword)){
+        throw new ApiError(400,"Both current and new password are required fields")
+    }
+
+    if(currentPassword.trim() === "" || newPassword.trim() === ""){
+        throw new ApiError(400,"No field can be Empty")
+    }
+
+    const user = await User.findById(req.user._id)
+
+    const isCorrectPassword = await user.isCorrectPassword(currentPassword)
+
+    if(!isCorrectPassword){
+        throw new ApiError(400,"Incorrect Password")
+    }
+
+    const {accessToken,refreshToken} = await generateAccessAndRefreshToken(req.user._id)
+
+    if (!(accessToken && refreshToken)) {
+        throw new ApiError(500, "Server Error")
+    }
+
+    user.password = newPassword
+
+    await user.save()
+
+    return res
+            .status(200)
+            .cookie("accessToken",accessToken,{...httpOnlyCookie , sameSite:"Strict"})
+            .cookie("refreshToken",refreshToken,{...httpOnlyCookie , sameSite:"Strict"})
+            .json(
+                new ApiResponse(200,null,"Password Updated Successfully")
+            )
+})
+
 export {
     registerUser,
     loginUser,
     logoutUser,
     updateProfile,
-    updateAvatar
+    updateAvatar,
+    updatePassword
 }

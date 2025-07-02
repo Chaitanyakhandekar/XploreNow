@@ -8,7 +8,8 @@ import
     loginUser,
     logoutUser,
     updateProfile,
-    updateAvatar
+    updateAvatar,
+    updatePassword
 }
 from "../controllers/user.controller.js"
 
@@ -19,5 +20,6 @@ router.route("/login").post(loginUser)
 router.route("/logout").get(verifyJWT,logoutUser)
 router.route("/update-profile").patch(verifyJWT,updateProfile)
 router.route("/update-avatar").patch(verifyJWT,upload.single("avatar"),updateAvatar)
+router.route("/update-password").patch(verifyJWT,updatePassword)
 
 export default router;
