@@ -17,7 +17,9 @@ server.use(cookieParser())
 
 
 import userRouter from "./routes/user.route.js"
+import agencyRouter from "./routes/agency.route.js"
 
 server.use("/api/v1/users" , userRouter)
+server.use("/api/v1/agencies" , agencyRouter)
 
 export default server;

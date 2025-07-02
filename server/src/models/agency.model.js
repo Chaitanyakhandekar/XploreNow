@@ -49,6 +49,13 @@ const agencySchema = new Schema({
         default: "pending"
     },
 
+    role: {
+        type: String,
+        default: "agency",
+        enum: ["agency"]
+    },
+
+
     isVerified:{
         type:Boolean,
         default:false
@@ -92,6 +99,7 @@ agencySchema.methods.generateAccessToken = function(){
     return jwt.sign(
         {
             _id:this._id,
+            role:"agency",
             name:this.name,
             email:this.email,
             isVerified:this.isVerified
