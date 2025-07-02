@@ -137,19 +137,14 @@ const updateProfile = asyncHandler(async (req,res)=>{      // verifyJWT middlewa
         throw new ApiError(400,"Field for Update Cannot be Empty")
     }
 
-    const user = await User.findById(req.user._id)
-
-    if(!user){
-        throw new ApiError(400,"User not found")
-    }
+    let update = {}
+    if(username) update = {...update,username:username}
+    if(fullName)  update = {...update , fullName:fullName}
 
     const updatedUser = await User.findByIdAndUpdate(
         req.user._id,
         {
-            $set:{
-                username:username || user.username,
-                fullName:fullName || user.fullName
-            }
+            $set: update
         },
         {
             new:true
