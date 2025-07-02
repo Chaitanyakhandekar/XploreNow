@@ -291,6 +291,34 @@ const refreshAccessToken = asyncHandler(async (req,res)=>{
 
 })
 
+const getUserProfile = asyncHandler(async (req,res)=>{      // verifyJWT middleware
+
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+        throw new ApiError(400,"User not found")
+    }
+
+    return res
+            .status(200)
+            .json(
+                new ApiResponse(200,{
+                    _id:user._id,
+                    username:user.username,
+                    fullName:user.fullName,
+                    email:user.email,
+                    phone:user.phone,
+                    avatar:user.avatar,
+                    isVerified:user.isVerified,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt
+
+                },
+            "User Profile Fetched Successfully")
+            )
+
+})
+
 export {
     registerUser,
     loginUser,
@@ -298,5 +326,6 @@ export {
     updateProfile,
     updateAvatar,
     updatePassword,
-    refreshAccessToken
+    refreshAccessToken,
+    getUserProfile
 }
