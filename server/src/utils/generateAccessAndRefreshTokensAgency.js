@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { Agency } from "../models/agency.model.js";
-import { asyncHandler } from "./asyncHandler.js";
 import { ApiError } from "./apiError.js";
 
 export const generateAccessAndRefreshTokenAgency = async (agencyId) => {
