@@ -19,6 +19,10 @@ export const generateAccessAndRefreshToken = async (userId)=>{
         const accessToken =  user.generateAccessToken()
         const refreshToken =  user.generateRefreshToken()
 
+        if(!(accessToken && refreshToken)){
+            throw new ApiError(500,"Server Error")
+        }
+
         user.refreshToken = refreshToken;
 
         await user.save({validateBeforeSave:false})
