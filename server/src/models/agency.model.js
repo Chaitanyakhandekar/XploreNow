@@ -6,13 +6,15 @@ const agencySchema = new Schema({
 
     name: {
         type: String,
-        required: true
+        required: true,
+        lowercase:true
     },
 
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        lowercase:true
     },
 
     password: {
