@@ -5,3 +5,18 @@ default avatar =     url: 'http://res.cloudinary.com/drftighpf/image/upload/v175
  2 email verification for user and agency
  3 forgot password for user and agency
  4 add payment booking system for trek bookings
+
+ 5 advanced features
+ | Area                | Feature                                              |
+| ------------------- | ---------------------------------------------------- |
+| Intelligence        | AI Itinerary Planner, Smart Trek Suggestion          |
+| Vendor Empowerment  | Agency Dashboard, Mini Websites, Multi-vendor system |
+| Trust & Safety      | KYC, Live Tracking, SOS, Verified Reviews            |
+| Community           | Trek Forums, Trip Stories, Gamification              |
+| Booking Flexibility | Group Bookings, EMI, Custom Trips, Split Payment     |
+| Mobile-First        | Offline Access, Push Alerts, Gallery Sharing         |
+| Performance & SEO   | Fast Search, PWA, Next.js, SEO pages                 |
+| Admin & Analytics   | Dashboard with growth insights                       |
+| Automation          | WhatsApp + Email automation, Booking flows           |
+
+6 add followers feature
