@@ -235,10 +235,55 @@ const updateLogo = asyncHandler(async (req,res)=>{      // verifyJWTAgency, mult
 
 })
 
+const updatePassword = asyncHandler(async (req,res)=>{      // verifyJWTAgency middleware
+
+    const {currentPassword,newPassword} = req.body
+
+    if(!(currentPassword && newPassword)){
+        throw new ApiError(400,"Both current and new password are required fields")
+    }
+
+    if(currentPassword.trim() === "" || newPassword.trim() === ""){
+        throw new ApiError(400,"No field can be Empty")
+    }
+
+    if (newPassword.length < 8) {
+    throw new ApiError(400, "New password must be at least 8 characters long")
+}
+
+
+    const agency = await Agency.findById(req.agency._id)
+
+    const isCorrectPassword = await agency.isCorrectPassword(currentPassword)
+
+    if(!isCorrectPassword){
+        throw new ApiError(400,"Incorrect Password")
+    }
+
+    agency.password = newPassword
+
+    await agency.save()
+
+    const {accessToken,refreshToken} = await generateAccessAndRefreshTokenAgency(req.agency._id)
+
+    if (!(accessToken && refreshToken)) {
+        throw new ApiError(500, "Server Error")
+    }
+
+    return res
+            .status(200)
+            .cookie("accessToken",accessToken,{...httpOnlyCookie , sameSite:"Strict"})
+            .cookie("refreshToken",refreshToken,{...httpOnlyCookie , sameSite:"Strict"})
+            .json(
+                new ApiResponse(200,null,"Password Updated Successfully")
+            )
+})
+
 export {
     registerAgency,
     loginAgency,
     logoutAgency,
     updateProfile,
-    updateLogo
+    updateLogo,
+    updatePassword
 }

@@ -218,6 +218,11 @@ const updatePassword = asyncHandler(async (req,res)=>{      // verifyJWT middlew
     if(currentPassword.trim() === "" || newPassword.trim() === ""){
         throw new ApiError(400,"No field can be Empty")
     }
+    
+    if (newPassword.length < 8) {
+    throw new ApiError(400, "New password must be at least 8 characters long")
+    }
+
 
     const user = await User.findById(req.user._id)
 
@@ -227,15 +232,15 @@ const updatePassword = asyncHandler(async (req,res)=>{      // verifyJWT middlew
         throw new ApiError(400,"Incorrect Password")
     }
 
+    user.password = newPassword
+
+    await user.save()
+
     const {accessToken,refreshToken} = await generateAccessAndRefreshToken(req.user._id)
 
     if (!(accessToken && refreshToken)) {
         throw new ApiError(500, "Server Error")
     }
-
-    user.password = newPassword
-
-    await user.save()
 
     return res
             .status(200)

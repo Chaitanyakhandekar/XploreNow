@@ -7,7 +7,8 @@ import
     loginAgency,
     logoutAgency,
     updateProfile,
-    updateLogo
+    updateLogo,
+    updatePassword
 }
 from "../controllers/agency.controller.js"
 
@@ -18,6 +19,7 @@ router.route("/login").post(loginAgency)
 router.route("/logout").get(verifyJWTAgency,logoutAgency)
 router.route("/update-profile").patch(verifyJWTAgency,updateProfile)
 router.route("/update-logo").patch(verifyJWTAgency,upload.single("logo"),updateLogo)
+router.route("/update-password").patch(verifyJWTAgency,updatePassword)
 
 
 export default router;
