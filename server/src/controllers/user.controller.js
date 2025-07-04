@@ -3,7 +3,7 @@ import dotenv from "dotenv"
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js"
 import { ApiResponse } from "../utils/apiResponse.js"
-import { uploadFileOnCloudinary } from "../utils/cloudinary.js"
+import { uploadFileOnCloudinary ,deleteFileFromCloudinary} from "../utils/cloudinary.js"
 import { User } from "../models/user.model.js"
 import { generateAccessAndRefreshToken } from "../utils/generateAccessAndRefreshToken.js"
 import { httpOnlyCookie } from "../constants.js";
@@ -182,26 +182,27 @@ const updateAvatar = asyncHandler(async (req,res)=>{        // verifyJWT , multe
         throw new ApiError(500,"Server Error")
     }
 
-    const updatedAvatar = await User.findByIdAndUpdate(
-        req.user._id,
-        {
-            $set:{
-                avatar:avatar.secure_url
-            }
-        },
-        {
-            new:true
-        }
-    ).select("-password -phone -refreshToken")
+    const user = await User.findById(req.user._id)
 
-    if(!updatedAvatar){
+    if(!user){
         throw new ApiError(500,"Server Error")
+    }
+
+    const oldPublicId = user.public_id
+
+    user.avatar = avatar.secure_url,
+    user.publicId = avatar.public_id
+
+    await user.save({validateBeforeSave:false})
+
+    if(oldPublicId){
+        deleteFileFromCloudinary(oldPublicId)
     }
 
     return res
             .status(200)
             .json(
-                new ApiResponse(200,updatedAvatar,"Avatar Updated Successfully")
+                new ApiResponse(200,user,"Avatar Updated Successfully")
             )
 
 })

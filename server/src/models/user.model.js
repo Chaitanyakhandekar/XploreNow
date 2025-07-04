@@ -30,6 +30,10 @@ const userSchema = new Schema({
         type: String
     },
 
+    publicId:{
+        type:String
+    },
+
     phone: {
         type: String
     },
