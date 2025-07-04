@@ -109,11 +109,17 @@ npm run dev
 
 ### 🛡️ Security Features
 ✅ HTTP-only Cookies (accessToken, refreshToken)
+
 ✅ sameSite: "Strict" protection against CSRF
+
 ✅ JWT token rotation during refresh
+
 ✅ Password hashing with Bcrypt
+
 ✅ Role-based auth middleware (user vs agency)
+
 ✅ Validation & centralized error handling
+
 ---
 
 ### 📦 Features Roadmap (WIP)
