@@ -8,7 +8,8 @@ import
     logoutAgency,
     updateProfile,
     updateLogo,
-    updatePassword
+    updatePassword,
+    refreshAccessToken
 }
 from "../controllers/agency.controller.js"
 
@@ -20,6 +21,7 @@ router.route("/logout").get(verifyJWTAgency,logoutAgency)
 router.route("/update-profile").patch(verifyJWTAgency,updateProfile)
 router.route("/update-logo").patch(verifyJWTAgency,upload.single("logo"),updateLogo)
 router.route("/update-password").patch(verifyJWTAgency,updatePassword)
+router.route("/refresh-access-token").get(refreshAccessToken)
 
 
 export default router;

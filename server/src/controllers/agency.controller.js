@@ -279,11 +279,58 @@ const updatePassword = asyncHandler(async (req,res)=>{      // verifyJWTAgency m
             )
 })
 
+const refreshAccessToken = asyncHandler(async (req,res)=>{
+
+    const encodedRefreshToken = req.cookies?.refreshToken
+
+    if (!encodedRefreshToken || encodedRefreshToken.trim() === "") {
+        throw new ApiError(400, "Refresh token missing")
+    }
+
+    let decodedRefreshToken;
+
+    try {
+         decodedRefreshToken = jwt.verify(encodedRefreshToken,process.env.REFRESH_TOKEN_SECRET)
+    } catch (error) {
+        throw new ApiError(401,"Invalid or expired refresh token")
+    }
+
+    if(!decodedRefreshToken){
+        throw new ApiError(500,"Server error")
+    }
+
+    const agency = await Agency.findById(decodedRefreshToken._id)
+
+    if(!agency){
+        throw new ApiError(500,"Agency not found")
+    }
+
+    const {accessToken,refreshToken} = await generateAccessAndRefreshTokenAgency(agency._id)
+
+    if(!(accessToken && refreshToken)){
+        throw new ApiError(500,"Server Error")
+    }
+
+    if(agency.refreshToken !== encodedRefreshToken){
+        throw new ApiError(403,"Refresh token is invalid or has been rotated")
+    }
+
+    return res
+            .status(200)
+            .cookie("accessToken",accessToken,{...httpOnlyCookie , sameSite:"Strict"})
+            .cookie("refreshToken",refreshToken,{...httpOnlyCookie , sameSite:"Strict"})
+            .json(
+                new ApiResponse(200,null,"AccessToken Refreshed Successfully")
+            )
+
+})
+
 export {
     registerAgency,
     loginAgency,
     logoutAgency,
     updateProfile,
     updateLogo,
-    updatePassword
+    updatePassword,
+    refreshAccessToken
 }
