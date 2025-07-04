@@ -29,6 +29,10 @@ const agencySchema = new Schema({
         type: String
     },
 
+    publicId:{
+        type:String
+    },
+
     description: {
         type: String
     },
