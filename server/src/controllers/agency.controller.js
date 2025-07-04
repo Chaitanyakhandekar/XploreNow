@@ -325,6 +325,34 @@ const refreshAccessToken = asyncHandler(async (req,res)=>{
 
 })
 
+const getAgencyProfile = asyncHandler(async (req,res)=>{      // verifyJWTAgency middleware
+
+    const agency = await Agency.findById(req.agency._id)
+
+    if(!agency){
+        throw new ApiError(400,"Agency not found")
+    }
+
+    return res
+            .status(200)
+            .json(
+                new ApiResponse(200,{
+                    _id:agency._id,
+                    name:agency.name,
+                    description:agency.description,
+                    email:agency.email,
+                    phone:agency.phone,
+                    logo:agency.logo,
+                    role:agency.role,
+                    isVerified:agency.isVerified,
+                    createdAt: agency.createdAt,
+                    updatedAt: agency.updatedAt
+
+                },
+            "Agency Profile Fetched Successfully")
+            )
+
+})
 export {
     registerAgency,
     loginAgency,
@@ -332,5 +360,6 @@ export {
     updateProfile,
     updateLogo,
     updatePassword,
-    refreshAccessToken
+    refreshAccessToken,
+    getAgencyProfile
 }
