@@ -9,4 +9,15 @@ import { generateAccessAndRefreshTokenAgency } from "../utils/generateAccessAndR
 import { httpOnlyCookie } from "../constants.js";
 import jwt from "jsonwebtoken"
 
-const create
+const createTrip = asyncHandler(async (req,res)=>{
+
+    // verified agency 
+    // get title,description,location,region,startDate,endDate,durationInDays(op) ,difficulty , type ,category , maxParticipents,price,images(min 3 , max - 5)
+    // validate all necessary fields
+    // first upload files on cloudinary 
+    // store secure_url,public_id 
+    // create trip
+    // send response
+
+    
+})

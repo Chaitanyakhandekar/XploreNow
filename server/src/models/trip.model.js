@@ -38,6 +38,34 @@ const tripSchema = new Schema({
         enum: ["easy", "moderate", "hard"]
     },
 
+    type: {
+        type: String,
+        enum: [
+            "trek", 
+            "trip", 
+            "camping", 
+            "adventure",
+            "backpacking",
+            "custom"
+        ],
+        required: true
+    },
+
+    category: {
+        type: String,
+        enum: [
+            "himalayan",
+            "sahyadri",
+            "beach",
+            "wildlife",
+            "desert",
+            "international",
+            "weekend",
+            "snow",
+            "spiritual"
+        ],
+    },
+
     maxParticipants: {
         type: Number
     },
@@ -52,7 +80,10 @@ const tripSchema = new Schema({
     },
 
     images: [
-       String
+       {
+        imageUrl:String,
+        publicId:String
+       }
     ],
 
     included: [
