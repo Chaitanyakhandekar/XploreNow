@@ -125,7 +125,31 @@ const loginAgency = asyncHandler(async (req,res)=>{
 
 })
 
+const logoutAgency = asyncHandler(async (req,res)=>{        // verifyJWT middleware
+
+    const agency = await Agency.findById(req.agency._id)
+
+    if(!agency){
+        throw new ApiError(400,"Agency not found")
+    }
+
+    agency.refreshToken = undefined
+    agency.lastLoggedOutAt = Date.now()
+
+    await agency.save({validateBeforeSave:false})
+
+    return res
+            .status(200)
+            .clearCookie("accessToken" , {...httpOnlyCookie , sameSite:"Strict"})
+            .clearCookie("refreshToken" , {...httpOnlyCookie , sameSite:"Strict"})
+            .json(
+                new ApiResponse(200,null,"Agency Logout Successfully")
+            )
+
+})
+
 export {
     registerAgency,
-    loginAgency
+    loginAgency,
+    logoutAgency
 }

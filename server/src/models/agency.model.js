@@ -33,6 +33,10 @@ const agencySchema = new Schema({
         type: String
     },
 
+    lastLoggedOutAt:{
+        type:Date
+    },
+
     website: {
         type: String
     },
