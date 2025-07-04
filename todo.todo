@@ -2,3 +2,6 @@ default avatar =     url: 'http://res.cloudinary.com/drftighpf/image/upload/v175
                     secure_url: 'https://res.cloudinary.com/drftighpf/image/upload/v1751458090/f5ozv63h6ek3ujulc3gg.jpg',
 
  1 wishlist feature / model
+ 2 email verification for user and agency
+ 3 forgot password for user and agency
+ 4 add payment booking system for trek bookings
