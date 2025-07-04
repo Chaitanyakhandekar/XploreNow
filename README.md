@@ -19,6 +19,7 @@ XploreNow is a **scalable, secure, and real-world production-grade travel bookin
 
 ## 📁 Folder Structure
 
+```bash
 XploreNow/
 │
 ├── src/
@@ -35,6 +36,7 @@ XploreNow/
 ├── package.json
 ├── README.md
 └── server.js / index.js # Entry point
+```
 
 
 ---
@@ -89,18 +91,29 @@ npm run dev
 
 ---
 
+### 🏢 Agency Services (v1)
+
+| Route                            | Method | Description                        |
+| -------------------------------- | ------ | ---------------------------------- |
+| `/api/v1/agency/register`        | POST   | Register agency                    |
+| `/api/v1/agency/login`           | POST   | Login agency (JWT + Cookie)        |
+| `/api/v1/agency/logout`          | GET    | Logout agency                      |
+| `/api/v1/agency/profile`         | GET    | Get agency profile                 |
+| `/api/v1/agency/update-profile`  | PATCH  | Update agency name/description     |
+| `/api/v1/agency/update-logo`     | PATCH  | Upload & update agency logo        |
+| `/api/v1/agency/update-password` | PATCH  | Change agency password             |
+| `/api/v1/agency/refresh`         | GET    | Refresh access token (agency only) |
+
+---
+
 
 ### 🛡️ Security Features
 ✅ HTTP-only Cookies (accessToken, refreshToken)
-
 ✅ sameSite: "Strict" protection against CSRF
-
 ✅ JWT token rotation during refresh
-
 ✅ Password hashing with Bcrypt
-
-✅ Validation with custom ApiError handling
-
+✅ Role-based auth middleware (user vs agency)
+✅ Validation & centralized error handling
 ---
 
 ### 📦 Features Roadmap (WIP)
@@ -109,12 +122,14 @@ npm run dev
 | ✅ User Authentication                 | Completed   |
 | ✅ JWT Auth + Token Refresh            | Completed   |
 | ✅ Profile Avatar Upload (Cloudinary)  | Completed   |
+| ✅ Agency Auth + Profile               | Completed   |
 | ⏳ Forgot Password / OTP Verification  | In Progress |
 | ⏳ Email/Phone OTP Verification System | Planned     |
-| ⏳ Agency Dashboard & Trip Listings    | Planned     |
+| ⏳ Agency Dashboard & Trip Listings    | In Progress |
 | ⏳ Admin Panel                         | Planned     |
 | ⏳ Booking & Payments (Razorpay)       | Planned     |
 | ⏳ Real-time Notifications (Socket.io) | Planned     |
+
 
  ---
 
