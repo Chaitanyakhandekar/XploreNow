@@ -52,7 +52,7 @@ const tripSchema = new Schema({
     },
 
     category: {
-        type: String,
+        type: [String],
         enum: [
             "himalayan",
             "sahyadri",
@@ -64,6 +64,7 @@ const tripSchema = new Schema({
             "snow",
             "spiritual"
         ],
+        default:[]
     },
 
     maxParticipants: {
@@ -97,6 +98,7 @@ const tripSchema = new Schema({
     itinerary: [
         {
             day:Number,
+            time:String,
             description:String
         }
     ],
@@ -112,8 +114,10 @@ const tripSchema = new Schema({
 
     status: {
         type: String,
-        enum: ["active", "cancelled"],
-        default: "active"
+        enum: ["upcoming", "active", "completed", "cancelled"],
+        default: "upcoming",
+        lowercase: true,
+        trim: true
     },
 
     averageRating: {

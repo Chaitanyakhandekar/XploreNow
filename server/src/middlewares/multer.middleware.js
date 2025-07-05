@@ -6,11 +6,11 @@ const storage = multer.diskStorage({
         cb(null,"./public/temp")
     },
     filename:function(req,file,cb){
-        cb(null,path.basename())
+        cb(null,file.originalname)
     }
 })
 
 export const upload = multer({
     storage:storage,limits: {
-    fileSize: 6 * 1024 * 1024 // 6MB max per file
+    fileSize: 8 * 1024 * 1024 // 8MB max per file
   }})
