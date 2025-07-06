@@ -12,14 +12,6 @@ import { Agency } from "../models/agency.model.js";
 
 const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middleware
 
-    // verified agency 
-    // get title,description,location,region,startDate,endDate,durationInDays ,difficulty , type ,category , maxParticipents,price,images(min 3 , max - 5)
-    // validate all necessary fields
-    // first upload files on cloudinary 
-    // store secure_url,public_id 
-    // create trip
-    // send response
-
     const {
         title,
         description,
@@ -27,7 +19,6 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
         region,
         startDate,
         endDate,
-        // durationInDays,
         difficulty, 
         type,
         category,
@@ -77,10 +68,6 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
     if(parseFloat(price) < 1){
         throw new ApiError(400,"invalid price")
     }
-
-    // if(Number(durationInDays) < 1){
-    //     throw new ApiError(400,"duration cannot be less than 1 day")
-    // }
 
     if(req.files?.length < 3){
         throw new ApiError(400,"minimum 3 images are required")
@@ -141,6 +128,10 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
             .json(
                 new ApiResponse(201,newTrip,"Trip created Successfully")
             )
+
+})
+
+const updateTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency , verifyOwnerShip middleware
 
 })
 

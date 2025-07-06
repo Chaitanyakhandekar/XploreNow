@@ -6,9 +6,11 @@ import
     createTrip
 }
 from "../controllers/trip.controller.js"
+import { verifyOwnership } from "../middlewares/verifyOwnership.middleware.js"
 
 const router = Router()
 
 router.route("/create").post(verifyJWTAgency,upload.array("images",5) , createTrip)
+router.route("/verify-ownership/").get(verifyJWTAgency,verifyOwnership)
 
 export default router;
