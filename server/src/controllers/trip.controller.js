@@ -27,7 +27,7 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
         region,
         startDate,
         endDate,
-        durationInDays,
+        // durationInDays,
         difficulty, 
         type,
         category,
@@ -40,7 +40,7 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
     } = req.body
 
     const stringFields = [title, description, location, region, startDate, endDate, difficulty, type, category];
-    const numberFields = [maxParticipents, price, durationInDays];
+    const numberFields = [maxParticipents, price];
 
     if(stringFields.some((f)=> !f || (f && f.trim() === "")) || numberFields.some((f)=>  f===undefined || f===null)){
         throw new ApiError(400,"all fields are required and cannnot be empty.")
@@ -78,9 +78,9 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
         throw new ApiError(400,"invalid price")
     }
 
-    if(Number(durationInDays) < 1){
-        throw new ApiError(400,"duration cannot be less than 1 day")
-    }
+    // if(Number(durationInDays) < 1){
+    //     throw new ApiError(400,"duration cannot be less than 1 day")
+    // }
 
     if(req.files?.length < 3){
         throw new ApiError(400,"minimum 3 images are required")
@@ -89,6 +89,8 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
     if(req.files?.length > 5){
         throw new ApiError(400,"you can upload maximum 5 images.")
     }
+
+    const durationInDays = (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)
 
      let imageUrls = await Promise.all(
         req.files.map(async(file)=>{
@@ -116,7 +118,7 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
         region: region.trim(),
         startDate:new Date(startDate),
         endDate:new Date(endDate),
-        durationInDays:Number(durationInDays),
+        durationInDays:Number(durationInDays===0 ? 1 : Math.ceil(durationInDays)),
         difficulty: difficulty.trim(),
         type: type.trim(),
         category: category.trim(),
