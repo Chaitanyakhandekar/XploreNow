@@ -251,7 +251,36 @@ const updateTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency , ver
 
 })
 
+const deleteTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency , verifyOwnership middleware
+
+    const trip = await Trip.findById(req.agency.tripId)
+
+    const images = trip.images
+
+    const isDeleted = await Promise.all(
+        images.map(async (image)=>{
+            await deleteFileFromCloudinary(image.publicId)
+        })
+    )
+
+    console.log(isDeleted)
+
+    const deletedTrip = await Trip.findByIdAndDelete(req.agency.tripId)
+
+    if(!deletedTrip){
+        throw new ApiError(500,"MongoDB deletion Error")
+    }
+
+    return res
+            .status(200)
+            .json(
+                new ApiResponse(200,deletedTrip,"Trip Deleted Successfully")
+            )
+
+})
+
 export {
     createTrip,
-    updateTrip
+    updateTrip,
+    deleteTrip
 }
