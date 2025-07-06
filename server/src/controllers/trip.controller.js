@@ -279,8 +279,25 @@ const deleteTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency , ver
 
 })
 
+const getTripById = asyncHandler(async (req, res) => { // verifyJWTAgency, verifyOwnership middleware
+
+    const trip = await Trip.findById(req.agency.tripId);
+
+    if (!trip) {
+        throw new ApiError(404, "Trip not found");
+    }
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, trip, "Trip fetched successfully")
+        );
+});
+
+
 export {
     createTrip,
     updateTrip,
-    deleteTrip
+    deleteTrip,
+    getTripById
 }

@@ -1,1 +1,2 @@
-1. send notification to trip members/users after updating startDate,endDate,price,maxParticipants,location,difficulty,type,included,excluded,itinerary
+1. automate trip status according to start and end date 
+2. send notification to trip members/users after updating startDate,endDate,price,maxParticipants,location,difficulty,type,included,excluded,itinerary
