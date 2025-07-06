@@ -91,8 +91,6 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
         }
     })
     )
-
-    console.log("Image Urls = ",imageUrls)
     
     if(!imageUrls.length){
         throw new ApiError(500,"coludinary upload failed")
@@ -131,10 +129,129 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
 
 })
 
-const updateTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency , verifyOwnerShip middleware
+const updateTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency , verifyOwnership middleware
+
+     const {
+        title,
+        description,
+        location,
+        region,
+        startDate,
+        endDate,
+        difficulty, 
+        type,
+        category,
+        maxParticipents,
+        price,
+        included,
+        excluded,
+        itinerary,
+        tags
+    } = req.body
+
+    const trip = await Trip.findById(req.agency.tripId)
+
+    const allFields = {title, description, location, region, startDate, endDate, difficulty, type, category,maxParticipents,price,included,excluded,itinerary,tags};
+
+    const allFieldsArray = [title, description, location, region, startDate, endDate, difficulty, type, category,maxParticipents,price,included,excluded,itinerary,tags];
+    
+    const isAnyFieldPresent = Object.values(allFields).some((f) => {
+        if (f === undefined || f === null) return false;
+        if (typeof f === "string") return f.trim() !== "";
+        if (Array.isArray(f)) return f.length > 0;
+        return true; // for numbers or other valid values
+    });
+
+    if (!isAnyFieldPresent) {
+    throw new ApiError(400, "At least 1 field is required for update.");
+    }
+
+    if (startDate) {
+        const start = new Date(startDate);
+        if (isNaN(start.getTime())) {
+            throw new ApiError(400, "Invalid start date");
+        }
+        if (start.getTime() <= Date.now()) {
+            throw new ApiError(400, "Start date cannot be a past date");
+        }
+    }
+
+    if (endDate) {
+        const end = new Date(endDate);
+        if (isNaN(end.getTime())) {
+            throw new ApiError(400, "Invalid end date");
+        }
+
+        const referenceStart = startDate ? new Date(startDate) : new Date(trip.startDate);
+        if (isNaN(referenceStart.getTime())) {
+            throw new ApiError(500, "Trip start date is invalid");
+        }
+
+        if (end.getTime() <= Date.now() || end.getTime() < referenceStart.getTime()) {
+            throw new ApiError(400, "End date cannot be in the past or before start date");
+        }
+    }
+
+    if(maxParticipents && maxParticipents<1 && maxParticipents < trip.currentParticipants){
+        throw new ApiError(400,"max participents cannot be less that current participents and less than 1.")
+    }
+
+    if(price && parseFloat(price)<0){
+        throw new ApiError(400,"price cannot be less than 0.")
+    }
+
+    if(difficulty && !["easy", "moderate", "hard"].includes(difficulty.trim())){
+        throw new ApiError(400,"invalid difficulty level")
+    }
+
+    if(type && !["trek", "trip", "camping", "adventure","backpacking","custom"].includes(type)){
+        throw new ApiError(400,"invalid type")
+    }
+
+    if(category && !["himalayan","sahyadri","beach","wildlife","desert","international","weekend","snow","spiritual"].includes(category)){
+    throw new ApiError(400,"invalid category")
+    }
+
+    const keys = Object.keys(allFields)
+
+    let updateFields = {}
+
+    allFieldsArray.forEach((field,index)=>{
+        
+        if(field){
+            if(typeof(field)==="string" && field.trim()!== ""){
+                 updateFields = {...updateFields , [keys[index]]:field}
+            }
+            else if(typeof(field)==="number"){
+                 updateFields = {...updateFields , [keys[index]]:field}
+            }
+            else if(Array.isArray(field) && field.length){
+                 updateFields = {...updateFields , [keys[index]]:field}
+            }
+        }
+    })
+
+    const updatedTrip = await Trip.findByIdAndUpdate(
+        req.agency.tripId,
+        updateFields,
+        {
+            new:true
+        }
+    )
+
+    if(!updatedTrip){
+        throw new ApiError(500,"MongoDB updation Error")
+    }
+
+    return res
+            .status(200)
+            .json(
+                new ApiResponse(200,updatedTrip,"Trip Updated Successfully")
+            )
 
 })
 
 export {
-    createTrip
+    createTrip,
+    updateTrip
 }

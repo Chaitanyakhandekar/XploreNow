@@ -3,7 +3,7 @@ import { ApiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Trip } from "../models/trip.model.js";
 
-export const verifyOwnership = asyncHandler(async(req,res)=>{  // verifyJWTAgency middleware is must
+export const verifyOwnership = asyncHandler(async(req,res,next)=>{  // verifyJWTAgency middleware is must
     
     const tripId = req.body?.tripId || req.query?.tripId || req.params?.tripId
 
@@ -22,8 +22,8 @@ export const verifyOwnership = asyncHandler(async(req,res)=>{  // verifyJWTAgenc
         throw new ApiError(401,"you are not owner of this trip")
     }
 
-    console.log(isOwner)
+    req.agency = {...req.agency , tripId}
 
-    return res.status(200).json({isOwner},"")
+    next()
 
 })
