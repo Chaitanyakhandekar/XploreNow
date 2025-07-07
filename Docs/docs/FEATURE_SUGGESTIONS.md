@@ -81,3 +81,14 @@ POST   /follow/:agencyId
 DELETE /unfollow/:agencyId
 ```
 ---
+
+### 🧠 Additional (Optional) Filters You Can Consider
+
+| Field      | Type    | Description                                               |
+| ---------- | ------- | --------------------------------------------------------- |
+| `region`   | String  | Filter by region (e.g., `"Pune"`, `"Ladakh"`, `"Kerala"`) |
+| `duration` | Number  | Filter by trip duration (in days)                         |
+| `sortBy`   | String  | Sort results (`"latest"`, `"priceLowToHigh"`, etc.)       |
+| `hasSeats` | Boolean | Only show trips with seats left                           |
+
+---

@@ -299,8 +299,12 @@ const getAllAgencyTrips = asyncHandler(async (req,res)=>{   // verifyJWTAgency, 
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 10
     const skip = (page - 1) * limit
+    const filterQuery = req.filterQuery
+   
 
-    const totalTrips = await Trip.countDocuments({createdBy:req.agency._id})
+    const totalTrips = await Trip.countDocuments(filterQuery)
+
+    console.log(totalTrips)
 
     if(totalTrips===0){
         return res
@@ -312,9 +316,7 @@ const getAllAgencyTrips = asyncHandler(async (req,res)=>{   // verifyJWTAgency, 
 
     const allTrips = await Trip.aggregate([
         {
-            $match:{
-                createdBy:new mongoose.Types.ObjectId(req.agency._id)
-            }
+            $match:filterQuery
         },
         {
             $sort:{createdAt:-1}
@@ -335,6 +337,8 @@ const getAllAgencyTrips = asyncHandler(async (req,res)=>{   // verifyJWTAgency, 
     if(!allTrips.length){
         throw new ApiError(500,"Server Error")
     }
+
+    console.log(allTrips)
 
     return res
             .status(200)
