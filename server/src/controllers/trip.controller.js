@@ -418,6 +418,8 @@ const getAllPublicTrips = asyncHandler(async (req,res)=>{   // filterOptions mid
 
 })
 
+
+
 export {
     createTrip,
     updateTrip,
