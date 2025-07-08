@@ -19,7 +19,7 @@ const bookingSchema = new Schema({
 
     participants: {
         type: Number,
-        default: 0
+        default: 1
     },
 
     amountPaid: {
