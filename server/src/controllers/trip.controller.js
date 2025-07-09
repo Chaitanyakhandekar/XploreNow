@@ -22,7 +22,7 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
         difficulty, 
         type,
         category,
-        maxParticipents,
+        maxParticipants,
         price,
         included,
         excluded,
@@ -31,7 +31,7 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
     } = req.body
 
     const stringFields = [title, description, location, region, startDate, endDate, difficulty, type, category];
-    const numberFields = [maxParticipents, price];
+    const numberFields = [maxParticipants, price];
 
     if(stringFields.some((f)=> !f || (f && f.trim() === "")) || numberFields.some((f)=>  f===undefined || f===null)){
         throw new ApiError(400,"all fields are required and cannnot be empty.")
@@ -61,7 +61,7 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
     throw new ApiError(400,"invalid category")
     }
 
-    if(Number(maxParticipents) < 1){
+    if(Number(maxParticipants) < 1){
         throw new ApiError(400,"max participents cannot be less than 1")
     }
 
@@ -107,7 +107,7 @@ const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middl
         difficulty: difficulty.trim(),
         type: type.trim(),
         category: category.trim(),
-        maxParticipents:Number(maxParticipents),
+        maxParticipants:Number(maxParticipants),
         price:parseFloat(price),
         images:imageUrls,
         included:JSON.parse(included),
@@ -141,7 +141,7 @@ const updateTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency , ver
         difficulty, 
         type,
         category,
-        maxParticipents,
+        maxParticipants,
         price,
         included,
         excluded,
@@ -151,9 +151,9 @@ const updateTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency , ver
 
     const trip = await Trip.findById(req.agency.tripId)
 
-    const allFields = {title, description, location, region, startDate, endDate, difficulty, type, category,maxParticipents,price,included,excluded,itinerary,tags};
+    const allFields = {title, description, location, region, startDate, endDate, difficulty, type, category,maxParticipants,price,included,excluded,itinerary,tags};
 
-    const allFieldsArray = [title, description, location, region, startDate, endDate, difficulty, type, category,maxParticipents,price,included,excluded,itinerary,tags];
+    const allFieldsArray = [title, description, location, region, startDate, endDate, difficulty, type, category,maxParticipants,price,included,excluded,itinerary,tags];
     
     const isAnyFieldPresent = Object.values(allFields).some((f) => {
         if (f === undefined || f === null) return false;
@@ -192,7 +192,7 @@ const updateTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency , ver
         }
     }
 
-    if(maxParticipents && maxParticipents<1 && maxParticipents < trip.currentParticipants){
+    if(maxParticipants && maxParticipants<1 && maxParticipants < trip.currentParticipants){
         throw new ApiError(400,"max participents cannot be less that current participents and less than 1.")
     }
 

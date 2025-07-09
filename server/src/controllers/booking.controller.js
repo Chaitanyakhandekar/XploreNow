@@ -13,55 +13,77 @@ import { Booking } from "../models/booking.model.js";
 import { User } from "../models/user.model.js";
 
 
-const createBooking = asyncHandler(async (req,res)=>{
+const createBooking = async (req)=>{
 
-    // const {tripId,agencyId,amountPaid,tripStartDate} = req.trip
-    const {tripId,amountPaid,paymentMode} = req.body
+    let newBooking;
+   try {
+     // const {tripId,agencyId,amountPaid,tripStartDate} = req.trip
+     const {tripId,amountPaid,paymentMode,totalBookings} = req.body
+ 
+     if(!(tripId && amountPaid && paymentMode)){
+         throw new ApiError(400,"All Fields are required")
+     }
+ 
+     if(!mongoose.Types.ObjectId.isValid(tripId)){
+         throw new ApiError(400,"Invalid Trip ID")
+     }
+ 
+     if(Number(amountPaid)<0){
+         throw new ApiError(400,"Invalid Amount")
+     }
+ 
+     if(!["razorpay", "stripe", "manual"].includes(paymentMode)){
+         throw new ApiError(400,"Invalid Payment Mode")
+     }
+ 
+     const trip = await Trip.findById(tripId)
+ 
+     if(!trip){
+         throw new ApiError(400,"Trip not found")
+     }
+ 
+      newBooking = await Booking.create({
+         userId:req.user._id,
+         tripId,
+         agencyId:trip.createdBy,
+         amountPaid,
+         paymentStatus:"success",
+         paymentMode,
+         bookingDate:new Date(),
+         participants:totalBookings,
+         tripStartDate:trip.startDate
+     })
+ 
+     if(!newBooking){
+         throw new ApiError(500,"Booking Error")
+     }
 
-    if(!(tripId && amountPaid && paymentMode)){
-        throw new ApiError(400,"All Fields are required")
-    }
-
-    if(!mongoose.Types.ObjectId.isValid(tripId)){
-        throw new ApiError(400,"Invalid Trip ID")
-    }
-
-    if(Number(amountPaid)<0){
-        throw new ApiError(400,"Invalid Amount")
-    }
-
-    if(!["razorpay", "stripe", "manual"].includes(paymentMode)){
-        throw new ApiError(400,"Invalid Payment Mode")
-    }
-
-    const trip = await Trip.findById(tripId)
-
-    if(!trip){
-        throw new ApiError(400,"Trip not found")
-    }
-
-    const newBooking = await Booking.create({
-        userId:req.user._id,
+     const updateTripParticipents = await Trip.findByIdAndUpdate(
         tripId,
-        agencyId:trip.createdBy,
-        amountPaid,
-        paymentStatus:"success",
-        paymentMode,
-        bookingDate:new Date(),
-        tripStartDate:trip.startDate
-    })
+        {
+            $inc:{currentParticipants:totalBookings }
+        },
+        {
+            new:true
+        }
+     )
 
-    if(!newBooking){
-        throw new ApiError(500,"Booking Error")
-    }
+     if(!updateTripParticipents){
+        throw new ApiError(500,"Error while updating currentParticipants")
+     }
+ 
+     return newBooking;
 
-    return res
-            .status(201)
-            .json(
-                new ApiResponse(201,newBooking,"Trip Booked Successfully.")
-            )
+   } catch (error) {
+    console.error(error)
+        return {
+            success: false,
+            booking: newBooking
+        }
 
-})
+   }
+
+}
 
 export {
     createBooking
