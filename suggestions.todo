@@ -1,0 +1,7 @@
+updatePassword = {
+    📧 Email Notification: Notify the user via email that their password was changed.
+
+    🛡️ Account Lock: After multiple incorrect password attempts (brute force protection).
+
+    🔁 Invalidate all sessions: If you later support multiple device logins, invalidate all refresh tokens after password change.
+}
