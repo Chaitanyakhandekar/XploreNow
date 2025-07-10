@@ -85,6 +85,120 @@ const createBooking = async (req)=>{
 
 }
 
+const getAllAgencyBookings = asyncHandler(async (req,res)=>{        // verifyJWTAgency middleware
+
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || 20
+    const skip = (page - 1) * limit
+    const {status , startDate , endDate} = req.query
+
+    let matchQuery = { agencyId:new mongoose.Types.ObjectId(req.agency._id)}
+
+    if(status && status.trim() !=="")matchQuery.status = status
+    
+    if(startDate && endDate){
+        matchQuery.createdAt = {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate)
+        }
+    }
+
+    const totalBookings = await Booking.countDocuments({
+        agencyId:req.agency._id
+    })
+
+    if(totalBookings===0){
+        return res
+                .status(200)
+                .json(
+                    new ApiResponse(200,null,"There is no bookings yet.")
+                )
+    }
+
+    const allBookings = await Booking.aggregate([
+        {
+            $match: matchQuery
+        },
+        {
+            $sort:{createdAt:-1}
+        },
+        {
+            $skip:skip
+        },
+        {
+            $limit:limit
+        },
+        {
+            $lookup:{
+                from:"trips",
+                localField:"tripId",
+                foreignField:"_id",
+                as:"trip"
+            }
+        },
+        {
+            $unwind:"$trip"
+        },
+        {
+            $lookup:{
+                from:"users",
+                localField:"userId",
+                foreignField:"_id",
+                as:"user"
+            }
+        },
+        {
+            $unwind:"$user"
+        },
+        {
+            $project:{
+                _id:1,
+
+                trip:{
+                    _id:"$trip._id",
+                    title:"$trip.title",
+                    startDate:"$trip.startDate",
+                    region:"$trip.region"
+                },
+
+                user:{
+                    _id:"$user._id",
+                    fullName:"$user.fullName",
+                    email:"$user.email",
+                    phone:"$user.phone"
+                },
+
+                seatsBooked:"$participants",
+                status:1,
+                bookedAt:"$createdAt",
+
+
+            }
+        }
+       
+
+    ])
+
+    if(!allBookings){
+        throw new ApiError(500,"MongoDB search error")
+    }
+
+    return res
+            .status(200)
+            .json(
+                new ApiResponse(200,{
+                    allBookings,
+                    page,
+                    limit,
+                    totalBookings,
+                    totalPages:Math.ceil(totalBookings / limit),
+                    hasMore: page * limit < totalBookings
+                })
+            )
+
+})
+
 export {
-    createBooking
+    createBooking,
+    getAllAgencyBookings
 }
