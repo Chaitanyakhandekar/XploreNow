@@ -8,7 +8,8 @@ import
     deleteTrip,
     getTripById,
     getAllAgencyTrips,
-    getAllPublicTrips
+    getAllPublicTrips,
+    getAllTripParticipants
 }
 from "../controllers/trip.controller.js"
 import { verifyOwnership } from "../middlewares/verifyOwnership.middleware.js"
@@ -21,6 +22,7 @@ router.route("/update-trip/").patch(verifyJWTAgency,verifyOwnership,updateTrip)
 router.route("/verify-ownership/").get(verifyJWTAgency,verifyOwnership)
 router.route("/delete-trip/:tripId").get(verifyJWTAgency,verifyOwnership,deleteTrip)
 router.route("/get/:tripId").get(verifyJWTAgency,verifyOwnership,getTripById)
+router.route("/participants/all/:tripId").get(verifyJWTAgency,verifyOwnership,getAllTripParticipants)
 router.route("/agency-trips/").get(verifyJWTAgency,filterOptions,getAllAgencyTrips)
 router.route("/all/").get(filterOptions,getAllPublicTrips)
 router.route("/filters/").get(verifyJWTAgency,filterOptions)

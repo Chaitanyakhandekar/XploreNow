@@ -9,6 +9,7 @@ import { generateAccessAndRefreshTokenAgency } from "../utils/generateAccessAndR
 import { httpOnlyCookie } from "../constants.js";
 import jwt from "jsonwebtoken"
 import { Agency } from "../models/agency.model.js";
+import { Booking } from "../models/booking.model.js";
 
 const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middleware
 
@@ -418,11 +419,87 @@ const getAllPublicTrips = asyncHandler(async (req,res)=>{   // filterOptions mid
 
 })
 
+const getAllTripParticipants = asyncHandler(async (req,res)=>{  // verifyJWTAgency , verifyOwnership middleware
+
+    const totalParticipants = await Booking.countDocuments({
+        agencyId:new mongoose.Types.ObjectId(req.agency._id),
+        tripId: new mongoose.Types.ObjectId(req.agency.tripId)
+    })
+
+    if(totalParticipants===0){
+        return res
+                .status(200)
+                .json(
+                    new ApiResponse(200,[],"No participants in trip yet")
+                )
+    }
+
+    const tripParticipants = await Booking.aggregate([
+        {
+            $match:{
+                agencyId:new mongoose.Types.ObjectId(req.agency._id),
+                tripId: new mongoose.Types.ObjectId(req.agency.tripId)
+            }
+        },
+        {
+            $sort:{createdAt:-1}
+        },
+        {
+            $lookup:{
+                from:"users",
+                localField:"userId",
+                foreignField:"_id",
+                as:"user",
+                pipeline:[
+                    {
+                        $project:{
+                            _id:1,
+                            fullName:1,
+                            email:1,
+                            phone:1
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $unwind:"$user"
+        },
+        {
+            $project:{
+
+                    _id:0,
+                    bookingId:"$_id",
+                    bookingDate:"$createdAt",
+                    seatsBooked:"$participants",
+                    userId: "$user._id",
+                    fullName: "$user.fullName",
+                    email: "$user.email",
+                    phone: "$user.phone",
+                    paymentStatus: "$paymentStatus"
+            
+            }
+        }
+    ])
+
+    if(!tripParticipants.length){
+        throw new ApiError(500,"Server Error")
+    }
+
+    return res
+            .status(200)
+            .json(
+                new ApiResponse(200,tripParticipants,"All Trip Participants Fetched Successfully.")
+            )
+
+})
+
 export {
     createTrip,
     updateTrip,
     deleteTrip,
     getTripById,
     getAllAgencyTrips,
-    getAllPublicTrips
+    getAllPublicTrips,
+    getAllTripParticipants
 }
