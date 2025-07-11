@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Mail, Lock } from "lucide-react";
+import axios from "axios";
+import { useNavigate } from "react-router";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -26,6 +29,18 @@ export default function Login() {
     // submit logic here
     setTimeout(() => setLoading(false), 1500);
   };
+
+  const loginUser = async ()=>{
+    const response = await axios
+                              .post("/api/v1/users/login" , form)
+                              .then((response)=>{
+                                alert("User Logged In Successfully")
+                                navigate("/home")
+                              })
+                              .catch((response)=>{
+                                alert(response.response.data.split("Error:")[1].split("</pre>")[0])
+                              })
+  }
 
   return (
     <div className="min-h-screen flex flex-col justify-center bg-white">
@@ -72,6 +87,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
+            onClick={loginUser}
             className="w-full py-2 bg-[#00A99D] text-white rounded-xl hover:bg-opacity-90 transition"
           >
             {loading ? "Logging in..." : "Login"}
