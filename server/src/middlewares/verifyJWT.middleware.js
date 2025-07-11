@@ -6,20 +6,26 @@ import jwt from "jsonwebtoken"
 
 export const verifyJWT = asyncHandler(async (req,res,next)=>{
 
-    const accessToken = req.cookies?.accessToken
+    const encodedAccessToken = req.cookies?.accessToken
 
-    if(!accessToken){
-        throw new ApiError(400,"User not Authenticated")
+    if(!encodedAccessToken){
+        throw new ApiError(401,"User not Authenticated")
     }
 
-    const decodedToken = jwt.verify(accessToken,process.env.ACCESS_TOKEN_SECRET)
+    let decodedAccessToken;
 
-    if(!decodedToken){
-        throw new ApiError(500,"Server Error")
+    try {
+            decodedAccessToken = jwt.verify(encodedAccessToken,process.env.ACCESS_TOKEN_SECRET)
+        } catch (error) {
+            throw new ApiError(401,"Invalid or Expired AccessToken")
+        }
+
+    if(!decodedAccessToken || (decodedAccessToken && decodedAccessToken.role!== "user")){
+        throw new ApiError(403,"Server Error")
     }
 
     req.user = {
-        _id:decodedToken._id
+        _id:decodedAccessToken._id
     }
 
     next()

@@ -30,13 +30,17 @@ const userSchema = new Schema({
         type: String
     },
 
+    publicId:{
+        type:String
+    },
+
     phone: {
         type: String
     },
 
     role: {
         type: String,
-        enum: ["user", "admin"],
+        enum: ["user"],
         default: "user"
     },
 

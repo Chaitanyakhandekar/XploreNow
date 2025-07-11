@@ -38,6 +38,35 @@ const tripSchema = new Schema({
         enum: ["easy", "moderate", "hard"]
     },
 
+    type: {
+        type: String,
+        enum: [
+            "trek", 
+            "trip", 
+            "camping", 
+            "adventure",
+            "backpacking",
+            "custom"
+        ],
+        required: true
+    },
+
+    category: {
+        type: [String],
+        enum: [
+            "himalayan",
+            "sahyadri",
+            "beach",
+            "wildlife",
+            "desert",
+            "international",
+            "weekend",
+            "snow",
+            "spiritual"
+        ],
+        default:[]
+    },
+
     maxParticipants: {
         type: Number
     },
@@ -52,7 +81,10 @@ const tripSchema = new Schema({
     },
 
     images: [
-       String
+       {
+        imageUrl:String,
+        publicId:String
+       }
     ],
 
     included: [
@@ -66,6 +98,7 @@ const tripSchema = new Schema({
     itinerary: [
         {
             day:Number,
+            time:String,
             description:String
         }
     ],
@@ -81,8 +114,10 @@ const tripSchema = new Schema({
 
     status: {
         type: String,
-        enum: ["active", "cancelled"],
-        default: "active"
+        enum: ["upcoming", "active", "completed", "cancelled"],
+        default: "upcoming",
+        lowercase: true,
+        trim: true
     },
 
     averageRating: {

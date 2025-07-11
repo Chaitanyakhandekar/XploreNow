@@ -3,7 +3,7 @@ import dotenv from "dotenv"
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js"
 import { ApiResponse } from "../utils/apiResponse.js"
-import { uploadFileOnCloudinary } from "../utils/cloudinary.js"
+import { uploadFileOnCloudinary ,deleteFileFromCloudinary} from "../utils/cloudinary.js"
 import { User } from "../models/user.model.js"
 import { generateAccessAndRefreshToken } from "../utils/generateAccessAndRefreshToken.js"
 import { httpOnlyCookie } from "../constants.js";
@@ -182,26 +182,27 @@ const updateAvatar = asyncHandler(async (req,res)=>{        // verifyJWT , multe
         throw new ApiError(500,"Server Error")
     }
 
-    const updatedAvatar = await User.findByIdAndUpdate(
-        req.user._id,
-        {
-            $set:{
-                avatar:avatar.secure_url
-            }
-        },
-        {
-            new:true
-        }
-    ).select("-password -phone -refreshToken")
+    const user = await User.findById(req.user._id)
 
-    if(!updatedAvatar){
+    if(!user){
         throw new ApiError(500,"Server Error")
+    }
+
+    const oldPublicId = user.public_id
+
+    user.avatar = avatar.secure_url,
+    user.publicId = avatar.public_id
+
+    await user.save({validateBeforeSave:false})
+
+    if(oldPublicId){
+        deleteFileFromCloudinary(oldPublicId)
     }
 
     return res
             .status(200)
             .json(
-                new ApiResponse(200,updatedAvatar,"Avatar Updated Successfully")
+                new ApiResponse(200,user,"Avatar Updated Successfully")
             )
 
 })
@@ -217,6 +218,11 @@ const updatePassword = asyncHandler(async (req,res)=>{      // verifyJWT middlew
     if(currentPassword.trim() === "" || newPassword.trim() === ""){
         throw new ApiError(400,"No field can be Empty")
     }
+    
+    if (newPassword.length < 8) {
+    throw new ApiError(400, "New password must be at least 8 characters long")
+    }
+
 
     const user = await User.findById(req.user._id)
 
@@ -226,15 +232,15 @@ const updatePassword = asyncHandler(async (req,res)=>{      // verifyJWT middlew
         throw new ApiError(400,"Incorrect Password")
     }
 
+    user.password = newPassword
+
+    await user.save()
+
     const {accessToken,refreshToken} = await generateAccessAndRefreshToken(req.user._id)
 
     if (!(accessToken && refreshToken)) {
         throw new ApiError(500, "Server Error")
     }
-
-    user.password = newPassword
-
-    await user.save()
 
     return res
             .status(200)
@@ -291,6 +297,34 @@ const refreshAccessToken = asyncHandler(async (req,res)=>{
 
 })
 
+const getUserProfile = asyncHandler(async (req,res)=>{      // verifyJWT middleware
+
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+        throw new ApiError(400,"User not found")
+    }
+
+    return res
+            .status(200)
+            .json(
+                new ApiResponse(200,{
+                    _id:user._id,
+                    username:user.username,
+                    fullName:user.fullName,
+                    email:user.email,
+                    phone:user.phone,
+                    avatar:user.avatar,
+                    isVerified:user.isVerified,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt
+
+                },
+            "User Profile Fetched Successfully")
+            )
+
+})
+
 export {
     registerUser,
     loginUser,
@@ -298,5 +332,8 @@ export {
     updateProfile,
     updateAvatar,
     updatePassword,
-    refreshAccessToken
+    refreshAccessToken,
+    getUserProfile
 }
+
+// forgotPassword , verifyUser services

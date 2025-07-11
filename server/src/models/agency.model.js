@@ -6,13 +6,15 @@ const agencySchema = new Schema({
 
     name: {
         type: String,
-        required: true
+        required: true,
+        lowercase:true
     },
 
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        lowercase:true
     },
 
     password: {
@@ -27,8 +29,16 @@ const agencySchema = new Schema({
         type: String
     },
 
+    publicId:{
+        type:String
+    },
+
     description: {
         type: String
+    },
+
+    lastLoggedOutAt:{
+        type:Date
     },
 
     website: {
@@ -48,6 +58,13 @@ const agencySchema = new Schema({
         enum: ["pending", "approved", "rejected"],
         default: "pending"
     },
+
+    role: {
+        type: String,
+        default: "agency",
+        enum: ["agency"]
+    },
+
 
     isVerified:{
         type:Boolean,
@@ -92,6 +109,7 @@ agencySchema.methods.generateAccessToken = function(){
     return jwt.sign(
         {
             _id:this._id,
+            role:"agency",
             name:this.name,
             email:this.email,
             isVerified:this.isVerified
