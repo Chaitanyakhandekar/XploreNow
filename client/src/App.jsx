@@ -1,22 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Login from './pages/authentication/Login'
-import Register from './pages/authentication/Register'
-import {Routes,Route} from "react-router-dom"
-import Home from './pages/user/Home.jsx'
+// App.jsx (final, minimal)
+import { Routes, Route } from "react-router-dom";
+import Login    from "./pages/authentication/Login";
+import Register from "./pages/authentication/Register";
+import Home     from "./pages/user/Home.jsx";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-function App() {
-  
-
+export default function App() {
   return (
     <Routes>
-          <Route path="/" element={<Register/>}/>
-          <Route path="/login" element={<Login/>}/>
-          <Route path="/home" element={<Home/>}/>
-    </Routes>
-  )
+      {/* public */}
+      <Route path="/"       element={<Register />} />
+      <Route path="/login"  element={<Login   />} />
 
+      {/* protected wrapper */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/home" element={<Home/>} />
+      </Route>
+    </Routes>
+  );
 }
-export default App;

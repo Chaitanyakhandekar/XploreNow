@@ -6,7 +6,7 @@ const server = express()
 
 server.use(cors({
     origin:process.env.ALLOW_ORIGIN || "*",
-    creadentials:true
+    credentials:true
 }))
 
 server.use(express.json({limit:"16kb"}))

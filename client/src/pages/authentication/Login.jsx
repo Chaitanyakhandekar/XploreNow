@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Mail, Lock } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { api } from "../../api/api";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -98,6 +99,10 @@ export default function Login() {
           Don’t have an account? <a href="/register" className="text-[#00A99D] font-medium">Register</a>
         </div>
       </div>
+
+      <button onClick={async()=>{
+        const res = await axios.get("/api/v1/users/logout").then(()=>alert("logout suucessfully"))
+       }}>Logout</button>
 
       <footer className="mt-6 text-center text-xs text-gray-400">© 2025 XploreNow</footer>
     </div>

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { InputField } from "../../components/InputField";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { api } from "../../api/api";
 
 
 export default function Register() {
@@ -27,7 +28,7 @@ export default function Register() {
 
   const registerUser = async ()=>{
     validate();
-    const response = await axios
+    const response = await api
                         .post("/api/v1/users/register" , {
                             username:form.username,
                             fullName:form.name,
