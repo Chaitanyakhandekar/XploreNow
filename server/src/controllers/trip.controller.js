@@ -494,6 +494,21 @@ const getAllTripParticipants = asyncHandler(async (req,res)=>{  // verifyJWTAgen
 
 })
 
+const getTripByIdForUser = asyncHandler(async (req, res) => { // verifyJWT, middleware
+
+    const trip = await Trip.findById(req.params.tripId);
+
+    if (!trip) {
+        throw new ApiError(404, "Trip not found");
+    }
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, trip, "Trip fetched successfully")
+        );
+});
+
 export {
     createTrip,
     updateTrip,
@@ -501,5 +516,6 @@ export {
     getTripById,
     getAllAgencyTrips,
     getAllPublicTrips,
-    getAllTripParticipants
+    getAllTripParticipants,
+    getTripByIdForUser
 }
