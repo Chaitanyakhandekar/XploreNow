@@ -8,11 +8,14 @@ import
     deleteTrip,
     getTripById,
     getAllAgencyTrips,
-    getAllPublicTrips
+    getAllPublicTrips,
+    getAllTripParticipants,
+    getTripByIdForUser
 }
 from "../controllers/trip.controller.js"
 import { verifyOwnership } from "../middlewares/verifyOwnership.middleware.js"
 import { filterOptions } from "../middlewares/filterOptions.middleware.js"
+import { verifyJWT } from "../middlewares/verifyJWT.middleware.js"
 
 const router = Router()
 
@@ -21,6 +24,8 @@ router.route("/update-trip/").patch(verifyJWTAgency,verifyOwnership,updateTrip)
 router.route("/verify-ownership/").get(verifyJWTAgency,verifyOwnership)
 router.route("/delete-trip/:tripId").get(verifyJWTAgency,verifyOwnership,deleteTrip)
 router.route("/get/:tripId").get(verifyJWTAgency,verifyOwnership,getTripById)
+router.route("/get-user/:tripId").get(verifyJWT,getTripByIdForUser)
+router.route("/participants/all/:tripId").get(verifyJWTAgency,verifyOwnership,getAllTripParticipants)
 router.route("/agency-trips/").get(verifyJWTAgency,filterOptions,getAllAgencyTrips)
 router.route("/all/").get(filterOptions,getAllPublicTrips)
 router.route("/filters/").get(verifyJWTAgency,filterOptions)

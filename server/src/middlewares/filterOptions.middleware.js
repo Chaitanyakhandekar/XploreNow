@@ -60,7 +60,8 @@ export const filterOptions = asyncHandler(async (req,res,next)=>{      // verify
         if(search){
             filterQuery.$or = [
                 {location :{ $regex:search , $options:"i"}},
-                {title:{ $regex:search , $options:"i" }}
+                {title:{ $regex:search , $options:"i" }},
+                {region:{ $regex:search , $options:"i"}}
             ]
         }
         

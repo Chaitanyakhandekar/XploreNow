@@ -325,6 +325,20 @@ const getUserProfile = asyncHandler(async (req,res)=>{      // verifyJWT middlew
 
 })
 
+const getCurrentUser =  asyncHandler(async (req,res)=>{
+
+    const user = await User.findById(req.user._id)
+    return res
+            .status(200)
+            .json(
+                new ApiResponse(200,{
+                _id:user._id,
+                role:user.role
+            },"fdf")
+            )
+
+})
+
 export {
     registerUser,
     loginUser,
@@ -333,7 +347,8 @@ export {
     updateAvatar,
     updatePassword,
     refreshAccessToken,
-    getUserProfile
+    getUserProfile,
+    getCurrentUser
 }
 
 // forgotPassword , verifyUser services
