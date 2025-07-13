@@ -3,127 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { LoaderIcon, SearchIcon, FilterIcon, XIcon } from "lucide-react";
 import { api } from "../../api/api";
 import { useNavigate, Link } from "react-router-dom";
+import { Button } from "../../components/Button";
+import { Input } from "../../components/Input";
+import { Select } from "../../components/Select";
+import { TripCard } from "../../components/TripCard";
+import { FilterSidebar } from "../../components/FilterSidebar";
 
-/* ---------- Tiny UI atoms ---------- */
-const Button = ({ children, className = "", ...props }) => (
-  <button
-    className={`px-4 py-2 rounded bg-[#00A99D] text-white hover:bg-opacity-90 disabled:opacity-60 ${className}`}
-    {...props}
-  >
-    {children}
-  </button>
-);
-
-const Input = ({ className = "", ...props }) => (
-  <input
-    className={`w-full px-3 py-2 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#00A99D] ${className}`}
-    {...props}
-  />
-);
-
-const Select = ({ className = "", children, ...props }) => (
-  <select
-    className={`w-full px-3 py-2 border rounded text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#00A99D] ${className}`}
-    {...props}
-  >
-    {children}
-  </select>
-);
-
-/* ---------- Trip Card ---------- */
-const TripCard = ({ trip }) => (
-  <motion.div
-    layout
-    className="border rounded-lg overflow-hidden shadow-lg bg-white hover:shadow-xl transition"
-  >
-    <img
-      src={trip.images[0].imageUrl}
-      alt={trip.title}
-      className="w-full aspect-[3/2] object-cover"
-    />
-    <div className="p-4">
-      <h3 className="text-lg font-semibold text-slate-800">{trip.title}</h3>
-      <p className="text-sm text-slate-600 mb-1">{trip.region}</p>
-      <p className="text-sm text-slate-500 line-clamp-2">{trip.description}</p>
-
-      <div className="mt-2 flex flex-wrap gap-2 text-xs text-white">
-        <span className="bg-[#334155] px-2 py-1 rounded">
-          {trip.difficulty}
-        </span>
-        <span className="bg-[#334155] px-2 py-1 rounded">
-          {trip.durationInDays} Days
-        </span>
-        <span className="bg-[#334155] px-2 py-1 rounded">₹{trip.price}</span>
-        <span className="bg-[#334155] px-2 py-1 rounded">{trip.type}</span>
-      </div>
-
-      <div className="mt-3 text-sm text-slate-600">
-        {trip.currentParticipants} / {trip.maxParticipants} Participants
-      </div>
-      <Link
-            to={`/view-details/${trip._id}`}
-            className="block mt-3 w-full text-sm px-4 py-2 rounded bg-[#00A99D] text-white text-center hover:bg-opacity-90"
-            >
-            View Details
-        </Link>
-    </div>
-  </motion.div>
-);
-
-/* ---------- Filter Form ---------- */
-const FilterSidebar = ({ filters, setFilters, onApply }) => (
-  <div className="space-y-4 text-sm">
-    <h2 className="font-semibold text-lg text-slate-800">Filters</h2>
-
-    <div>
-      <label className="block mb-1 text-slate-700">Type</label>
-      <Select
-        value={filters.type}
-        onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-      >
-        <option value="">All</option>
-        <option value="Trek">Trek</option>
-        <option value="Safari">Safari</option>
-        <option value="Expedition">Expedition</option>
-      </Select>
-    </div>
-
-    <div>
-      <label className="block mb-1 text-slate-700">Difficulty</label>
-      <Select
-        value={filters.difficulty}
-        onChange={(e) =>
-          setFilters({ ...filters, difficulty: e.target.value })
-        }
-      >
-        <option value="">All</option>
-        <option value="Easy">Easy</option>
-        <option value="Moderate">Moderate</option>
-        <option value="Hard">Hard</option>
-      </Select>
-    </div>
-
-    <div>
-      <label className="block mb-1 text-slate-700">Region</label>
-      <Select
-        value={filters.region}
-        onChange={(e) => setFilters({ ...filters, region: e.target.value })}
-      >
-        <option value="">All</option>
-        <option value="Maharashtra">Maharashtra</option>
-        <option value="Uttarakhand">Uttarakhand</option>
-        <option value="Rajasthan">Rajasthan</option>
-      </Select>
-    </div>
-
-    <Button className="w-full" onClick={onApply}>
-      Apply Filters
-    </Button>
-  </div>
-);
-
-
-/* ---------- Main Page ---------- */
 export default function ExplorePage() {
   const [loading, setLoading] = useState(true);
   const [trips, setTrips] = useState([]);
@@ -211,7 +96,7 @@ export default function ExplorePage() {
       </div>
 
       {/* Main Grid */}
-      <div className="flex flex-1 flex-col md:flex-row gap-4 px-4 py-6 max-w-7xl mx-auto w-full">
+      <div className="flex flex-1 flex-col md:flex-row gap-4 px-4 py-6 max-w-10xl mx-auto w-full">
         {/* Desktop sidebar */}
         <aside className="hidden md:block md:w-1/4">
           <FilterSidebar
@@ -222,7 +107,7 @@ export default function ExplorePage() {
         </aside>
 
         {/* Trip cards */}
-        <section className="w-full md:w-3/4">
+        <section className="w-full md:w-5/2">
           {loading ? (
             <div className="grid place-items-center h-64">
               <LoaderIcon className="h-8 w-8 animate-spin text-[#00A99D]" />
@@ -234,7 +119,7 @@ export default function ExplorePage() {
           ) : (
             <motion.div
               layout
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
             >
               {filteredTrips.map((trip) => (
                 <TripCard key={trip._id} trip={trip} />
