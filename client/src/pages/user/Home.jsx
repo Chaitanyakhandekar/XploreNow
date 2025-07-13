@@ -153,6 +153,8 @@ export default function ExplorePage() {
                 filters={filters}
                 setFilters={setFilters}
                 onApply={applyFilters}
+                setTrips={setTrips}
+                setFilteredTrips={setFilteredTrips}
               />
             </div>
           </motion.div>

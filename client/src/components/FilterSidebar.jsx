@@ -6,10 +6,10 @@ import { Input } from "./Input";
 
 export const FilterSidebar = ({ filters, setFilters, onApply , setTrips ,setFilteredTrips }) => {
 
-    let apiUrl  = `/trips/all/?type=${(filters.type && filters.type !=="all" ? filters.type : "")}&difficulty=${(filters.difficulty && filters.difficulty !=="all" ? filters.difficulty : "")}&region=${(filters.region && filters.region !=="all" ? filters.region : "")}&startDate=${filters.startDate || ""}&endDate=${filters.endDate || ""}`;
+    let apiUrl  = `/trips/all/?type=${(filters.type && filters.type !=="all" ? filters.type : "")}&difficulty=${(filters.difficulty && filters.difficulty !=="all" ? filters.difficulty : "")}&region=${(filters.region && filters.region !=="all" ? filters.region : "")}&startDate=${filters.startDate || ""}&endDate=${filters.endDate || ""}&category=${(filters.category && filters.category !=="all" ? filters.category : "")}&minPrice=${filters.minPrice || ""}&maxPrice=${filters.maxPrice || ""}`;
 
     useEffect(()=>{
-         apiUrl = `/trips/all/?type=${(filters.type && filters.type !=="all" ? filters.type : "")}&difficulty=${(filters.difficulty && filters.difficulty !=="all" ? filters.difficulty : "")}&region=${(filters.region && filters.region !=="all" ? filters.region : "")}&startDate=${filters.startDate || ""}&endDate=${filters.endDate || ""}`
+        apiUrl  = `/trips/all/?type=${(filters.type && filters.type !=="all" ? filters.type : "")}&difficulty=${(filters.difficulty && filters.difficulty !=="all" ? filters.difficulty : "")}&region=${(filters.region && filters.region !=="all" ? filters.region : "")}&startDate=${filters.startDate || ""}&endDate=${filters.endDate || ""}&category=${(filters.category && filters.category !=="all" ? filters.category : "")}&minPrice=${filters.minPrice || ""}&maxPrice=${filters.maxPrice || ""}`;
 
          console.log(filters)
     },[filters])
@@ -22,7 +22,7 @@ export const FilterSidebar = ({ filters, setFilters, onApply , setTrips ,setFilt
     }
 
     return (
-        <div className="space-y-4 text-sm">
+        <div className="space-y-4 text-sm sticky top-10">
     <h2 className="font-semibold text-lg text-slate-800">Filters</h2>
 
     <div>
@@ -56,6 +56,27 @@ export const FilterSidebar = ({ filters, setFilters, onApply , setTrips ,setFilt
     </div>
 
     <div>
+      <label className="block mb-1 text-slate-700 font-bold">Category</label>
+      <Select
+        value={filters.category}
+        onChange={(e) =>
+          setFilters({ ...filters, category: e.target.value })
+        }
+      >
+        <option value="all">All</option>
+        <option value="himalayan">Himalayan</option>
+        <option value="sahyadri">Sahyadri</option>
+        <option value="beach">Beach</option>
+        <option value="wildlife">Wildlife</option>
+        <option value="desert">Desert</option>
+        <option value="international">International</option>
+        <option value="weekend">Weekend</option>
+        <option value="snow">Snow</option>
+        <option value="spiritual">Spiritual</option>
+      </Select>
+    </div>
+
+    <div>
       <label className="block mb-1 text-slate-700 font-bold">StartDate</label> 
          <Input className="" type="date" onChange={(e)=>setFilters({...filters , startDate:new Date(e.target.value).toISOString()})}/>   
     </div>
@@ -63,18 +84,15 @@ export const FilterSidebar = ({ filters, setFilters, onApply , setTrips ,setFilt
       <label className="block mb-1 text-slate-700 font-bold">endDate</label> 
          <Input className="" type="date" onChange={(e)=>setFilters({...filters , endDate:new Date(e.target.value).toISOString()})}/>   
     </div>
-    {/* <div>
-      <label className="block mb-1 text-slate-700">Region</label>
-      <Select
-        value={filters.region}
-        onChange={(e) => setFilters({ ...filters, region: e.target.value })}
-      >
-        <option value="all">All</option>
-        <option value="maharashtra">Maharashtra</option>
-        <option value="Uttarakhand">Uttarakhand</option>
-        <option value="rajasthan">Rajasthan</option>
-      </Select>
-    </div> */}
+
+    <div>
+      <label className="block mb-1 text-slate-700 font-bold">Min Price</label> 
+         <Input className="" type="number" onChange={(e)=>setFilters({...filters , minPrice:e.target.value})}/>   
+    </div>
+    <div>
+      <label className="block mb-1 text-slate-700 font-bold">Max Price</label> 
+         <Input className="" type="number" onChange={(e)=>setFilters({...filters , maxPrice:e.target.value})}/>   
+    </div>
 
     <Button className="w-full" onClick={applyFilters}>
       Apply Filters
