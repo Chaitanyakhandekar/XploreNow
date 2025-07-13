@@ -100,9 +100,9 @@ export default function Login() {
         </div>
       </div>
 
-      <button onClick={async()=>{
-        const res = await axios.get("/api/v1/users/logout").then(()=>alert("logout suucessfully"))
-       }}>Logout</button>
+        <button onClick={async()=>{
+          const res = await axios.get("/api/v1/users/logout").then(()=>alert("logout suucessfully"))
+        }}>Logout</button>
 
       <footer className="mt-6 text-center text-xs text-gray-400">© 2025 XploreNow</footer>
     </div>

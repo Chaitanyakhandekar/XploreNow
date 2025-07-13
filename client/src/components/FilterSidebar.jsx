@@ -4,20 +4,23 @@ import { api } from "../api/api";
 import { useEffect } from "react";
 import { Input } from "./Input";
 
-export const FilterSidebar = ({ filters, setFilters, onApply , setTrips ,setFilteredTrips }) => {
+export const FilterSidebar = ({ filters, setFilters , setTrips ,setFilteredTrips, serachToggle, setSearchToogle }) => {
 
-    let apiUrl  = `/trips/all/?type=${(filters.type && filters.type !=="all" ? filters.type : "")}&difficulty=${(filters.difficulty && filters.difficulty !=="all" ? filters.difficulty : "")}&region=${(filters.region && filters.region !=="all" ? filters.region : "")}&startDate=${filters.startDate || ""}&endDate=${filters.endDate || ""}&category=${(filters.category && filters.category !=="all" ? filters.category : "")}&minPrice=${filters.minPrice || ""}&maxPrice=${filters.maxPrice || ""}`;
+    let apiUrl  = `/trips/all/?type=${(filters.type && filters.type !=="all" ? filters.type : "")}&difficulty=${(filters.difficulty && filters.difficulty !=="all" ? filters.difficulty : "")}&region=${(filters.region && filters.region !=="all" ? filters.region : "")}&startDate=${filters.startDate || ""}&endDate=${filters.endDate || ""}&category=${(filters.category && filters.category !=="all" ? filters.category : "")}&minPrice=${filters.minPrice || ""}&maxPrice=${filters.maxPrice || ""}&search=${filters.search || ""}`;
 
     useEffect(()=>{
-        apiUrl  = `/trips/all/?type=${(filters.type && filters.type !=="all" ? filters.type : "")}&difficulty=${(filters.difficulty && filters.difficulty !=="all" ? filters.difficulty : "")}&region=${(filters.region && filters.region !=="all" ? filters.region : "")}&startDate=${filters.startDate || ""}&endDate=${filters.endDate || ""}&category=${(filters.category && filters.category !=="all" ? filters.category : "")}&minPrice=${filters.minPrice || ""}&maxPrice=${filters.maxPrice || ""}`;
+        apiUrl  = `/trips/all/?type=${(filters.type && filters.type !=="all" ? filters.type : "")}&difficulty=${(filters.difficulty && filters.difficulty !=="all" ? filters.difficulty : "")}&region=${(filters.region && filters.region !=="all" ? filters.region : "")}&startDate=${filters.startDate || ""}&endDate=${filters.endDate || ""}&category=${(filters.category && filters.category !=="all" ? filters.category : "")}&minPrice=${filters.minPrice || ""}&maxPrice=${filters.maxPrice || ""}&search=${filters.search || ""}`;
 
-         console.log(filters)
+         console.log(apiUrl)
+
+          applyFilters()
     },[filters])
 
-    const applyFilters = ()=>{
-        const response = api
+
+    const applyFilters = async()=>{
+        const response =  await api
                             .get(apiUrl)
-                            .then((res)=>setFilteredTrips(res.data.data.allTrips))
+                            .then((res)=>{setFilteredTrips(res.data.data.allTrips);setTrips(res.data.data.allTrips) ; console.log(res.data)})
                             .catch(()=>setFilteredTrips([]))
     }
 
@@ -94,9 +97,9 @@ export const FilterSidebar = ({ filters, setFilters, onApply , setTrips ,setFilt
          <Input className="" type="number" onChange={(e)=>setFilters({...filters , maxPrice:e.target.value})}/>   
     </div>
 
-    <Button className="w-full" onClick={applyFilters}>
+    {/* <Button className="w-full" onClick={applyFilters}>
       Apply Filters
-    </Button>
+    </Button> */}
   </div>
     );
 };

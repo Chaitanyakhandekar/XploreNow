@@ -1,8 +1,12 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router";
+import { Button } from "./Button";
+import { useNavigate } from "react-router";
 
-export const TripCard = ({ trip }) => (
-  <motion.div
+export const TripCard = ({ trip }) => {
+    const navigate = useNavigate()
+  return (
+    <motion.div
     layout
     className="border rounded-lg overflow-hidden shadow-lg bg-white hover:shadow-xl transition cursor-pointer"
   >
@@ -30,12 +34,16 @@ export const TripCard = ({ trip }) => (
       <div className="mt-3 text-sm text-slate-600">
         {trip.currentParticipants} / {trip.maxParticipants} Participants
       </div>
-      <Link
-            to={`/view-details/${trip._id}`}
+      <Button
+            onClick={()=>{
+                localStorage.setItem("tripId",trip._id)
+               navigate( `/view-details/${trip._id}`)
+            }}
             className="block mt-3 w-full text-sm px-4 py-2 rounded bg-[#00A99D] text-white text-center hover:bg-opacity-90"
             >
             View Details
-        </Link>
+        </Button>
     </div>
   </motion.div>
-);
+  )
+};

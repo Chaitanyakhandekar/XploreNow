@@ -11,14 +11,17 @@ import { FilterSidebar } from "../../components/FilterSidebar";
 
 export default function ExplorePage() {
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
   const [trips, setTrips] = useState([]);
   const [filteredTrips, setFilteredTrips] = useState([]);
+  const [serachToggle , setSearchToogle] = useState(false)
   const navigate = useNavigate()
 
   const [filters, setFilters] = useState({
     type: "",
     difficulty: "",
     region: "",
+    search:""
   });
 
   // mobile drawer toggle
@@ -56,6 +59,13 @@ export default function ExplorePage() {
     setDrawerOpen(false); // close on mobile
   };
 
+  const searchByText = () =>{
+      if(!(!search || search.trim() === "")){
+          setFilters({...filters , search:search.trim()})
+          setSearchToogle(!serachToggle)
+      }
+  }
+
   return (
     <div className="min-h-screen bg-white flex flex-col text-slate-800 font-[Inter]">
       {/* Header */}
@@ -66,8 +76,12 @@ export default function ExplorePage() {
           <Input
             placeholder="Search destinations, trips, or regions..."
             className="flex-1 py-3 text-md font-semibold text-gray-500 font-[Inter]"
+            value={search}
+            onChange={(e)=>setSearch(e.target.value)}
           />
-          <Button className="bg-[#334155]">
+          <Button 
+          onClick={searchByText}
+          className="bg-[#334155]">
             <SearchIcon className="h-4 w-4" />
           </Button>
         </div>
@@ -75,7 +89,7 @@ export default function ExplorePage() {
         <div className="flex gap-2">
           <Button 
           onClick={async ()=> await api.get("/users/logout").then(()=>{alert("Logout Successfully"); navigate("/login")})}
-          className="bg-transparent text-[#000000] border border-[#334155]">
+          className="bg-transparent text-[#060606] border border-[#000000]">
             Logout
           </Button>
           <Button>
@@ -102,9 +116,10 @@ export default function ExplorePage() {
           <FilterSidebar
             filters={filters}
             setFilters={setFilters}
-            onApply={applyFilters}
             setTrips={setTrips}
             setFilteredTrips={setFilteredTrips}
+            serachToggle={serachToggle}
+            setSearchToogle={setSearchToogle}
           />
         </aside>
 
@@ -152,9 +167,11 @@ export default function ExplorePage() {
               <FilterSidebar
                 filters={filters}
                 setFilters={setFilters}
-                onApply={applyFilters}
+                // onApply={applyFilters}
                 setTrips={setTrips}
                 setFilteredTrips={setFilteredTrips}
+                serachToggle={serachToggle}
+                setSearchToogle={setSearchToogle}
               />
             </div>
           </motion.div>
