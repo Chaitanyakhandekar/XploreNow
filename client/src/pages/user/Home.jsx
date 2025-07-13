@@ -35,10 +35,6 @@ export default function ExplorePage() {
                                     setTrips(res.data.data.allTrips);
                                      setFilteredTrips(res.data.data.allTrips);
                                 })
-        // if (data.success) {
-        //   setTrips(data.data.allTrips);
-        //   setFilteredTrips(data.data.allTrips);
-        // }
       } catch (error) {
         console.error("Error fetching trips:", error);
       } finally {
@@ -61,7 +57,7 @@ export default function ExplorePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col text-slate-800">
+    <div className="min-h-screen bg-white flex flex-col text-slate-800 font-[Inter]">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white border-b shadow-sm p-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="text-2xl font-bold text-[#00A99D]">XploreNow</div>
@@ -69,7 +65,7 @@ export default function ExplorePage() {
         <div className="flex w-full md:w-1/2 gap-2">
           <Input
             placeholder="Search destinations, trips, or regions..."
-            className="flex-1"
+            className="flex-1 py-3 text-md font-semibold text-gray-500 font-[Inter]"
           />
           <Button className="bg-[#334155]">
             <SearchIcon className="h-4 w-4" />
@@ -77,10 +73,14 @@ export default function ExplorePage() {
         </div>
 
         <div className="flex gap-2">
-          <Button className="bg-transparent text-[#334155] border border-[#334155]">
-            Login
+          <Button 
+          onClick={async ()=> await api.get("/users/logout").then(()=>{alert("Logout Successfully"); navigate("/login")})}
+          className="bg-transparent text-[#000000] border border-[#334155]">
+            Logout
           </Button>
-          <Button>Sign Up</Button>
+          <Button>
+            <Link to="/register">Sign Up</Link>
+          </Button>
         </div>
       </header>
 
@@ -103,6 +103,8 @@ export default function ExplorePage() {
             filters={filters}
             setFilters={setFilters}
             onApply={applyFilters}
+            setTrips={setTrips}
+            setFilteredTrips={setFilteredTrips}
           />
         </aside>
 
