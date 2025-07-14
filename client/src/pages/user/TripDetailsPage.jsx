@@ -58,7 +58,7 @@ return (
     {/* Header */}
     <header className="sticky top-0 z-10 bg-white border-b shadow-sm p-3 md:p-4 flex items-center justify-between">
       <div className="text-xl md:text-2xl font-bold text-[#00A99D]">Trip Details</div>
-      <a href="/" className="text-[#334155]">
+      <a href="/home" className="text-[#334155]">
         <XIcon className="h-6 w-6" />
       </a>
     </header>
