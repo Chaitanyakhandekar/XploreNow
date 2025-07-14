@@ -3,6 +3,8 @@ import { Mail, Lock } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { api } from "../../api/api";
+import toast from "react-hot-toast";
+
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -35,7 +37,9 @@ export default function Login() {
     const response = await axios
                               .post("/api/v1/users/login" , form)
                               .then((response)=>{
-                                alert("User Logged In Successfully")
+                                // toast.success("Login Successfully");
+                                // toast.error("Something went wrong.");
+                                // toast("You’ve been logged out.");
                                 navigate("/home")
                               })
                               .catch((response)=>{
@@ -101,7 +105,7 @@ export default function Login() {
       </div>
 
         <button onClick={async()=>{
-          const res = await axios.get("/api/v1/users/logout").then(()=>alert("logout suucessfully"))
+          const res = await axios.get("/api/v1/users/logout").then(()=>{})
         }}>Logout</button>
 
       <footer className="mt-6 text-center text-xs text-gray-400">© 2025 XploreNow</footer>

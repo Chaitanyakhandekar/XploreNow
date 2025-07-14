@@ -66,6 +66,14 @@ export default function ExplorePage() {
       }
   }
 
+  const handleSearchChange = (e)=>{
+    setSearch(e.target.value)
+    
+    if(e.target.value.trim()===""){
+      setFilters({...filters , search:null})
+    }
+  }
+
   return (
     <div className="min-h-screen bg-white flex flex-col text-slate-800 font-[Inter]">
       {/* Header */}
@@ -77,7 +85,7 @@ export default function ExplorePage() {
             placeholder="Search destinations, trips, or regions..."
             className="flex-1 py-3 text-md font-semibold text-gray-500 font-[Inter]"
             value={search}
-            onChange={(e)=>setSearch(e.target.value)}
+            onChange={(e)=>handleSearchChange(e)}
           />
           <Button 
           onClick={searchByText}
@@ -88,11 +96,12 @@ export default function ExplorePage() {
 
         <div className="flex gap-2">
           <Button 
-          onClick={async ()=> await api.get("/users/logout").then(()=>{alert("Logout Successfully"); navigate("/login")})}
-          className="bg-transparent text-[#060606] border border-[#000000]">
+          onClick={async ()=> await api.get("/users/logout").then(()=>{navigate("/login")})}
+          className="bg-red-500 border font-bold">
             Logout
           </Button>
-          <Button>
+          <Button
+          className="bg-blue-400 border font-bold">
             <Link to="/register">Sign Up</Link>
           </Button>
         </div>
