@@ -1,42 +1,38 @@
+// src/pages/user/TripDetailsPage.jsx
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { api } from "../../api/api";
+import { api } from "../../api/api";          // ← your Axios instance
 import { LoaderIcon, XIcon } from "lucide-react";
-import axios from "axios";
 
-
-/* ---------- Main Page ---------- */
-/* ---------- Main Page ---------- */
+/* -------------------------------------------------------------------------- */
+/*                               Trip Details Page                            */
+/* -------------------------------------------------------------------------- */
 export default function TripDetailsPage() {
-  // const { tripId } = useParams();
+  // If you store tripId in the URL, use:  const { tripId } = useParams();
+  const tripId = localStorage.getItem("tripId");
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(true);
-  const [trip, setTrip] = useState(null);
+  const [trip, setTrip]     = useState(null);
 
-  /* Fetch trip details from backend */
+  /* Fetch trip details ----------------------------------------------------- */
   useEffect(() => {
-    const fetchTripDetails = async () => {
+    async function fetchTripDetails() {
       try {
-        const tripId = localStorage.getItem("tripId");   // ← keep your source
-        if (!tripId) throw new Error("No tripId in localStorage");
-
+        if (!tripId) throw new Error("No tripId found");
         const { data } = await api.get(`/trips/get-user/${tripId}`);
-        // backend shape: { success, statusCode, message, data: { …trip } }
-        setTrip(data.data);                               // ❤ HERE
-      } catch (error) {
-        console.error("Error fetching trip details:", error);
+        setTrip(data.data);                    // adjust if your API shape differs
+      } catch (err) {
+        console.error("Error fetching trip details:", err);
       } finally {
         setLoading(false);
       }
-    };
-
+    }
     fetchTripDetails();
-  }, []);   // ← no deps: run only once
+  }, [tripId]);
 
-  /* … the remainder of your component stays unchanged … */
-
-
-
+  /* Loading / Error states ------------------------------------------------- */
   if (loading) {
     return (
       <div className="grid place-items-center h-screen">
@@ -53,94 +49,130 @@ export default function TripDetailsPage() {
     );
   }
 
-return (
-  <div className="min-h-screen bg-white flex flex-col text-slate-800">
-    {/* Header */}
-    <header className="sticky top-0 z-10 bg-white border-b shadow-sm p-3 md:p-4 flex items-center justify-between">
-      <div className="text-xl md:text-2xl font-bold text-[#00A99D]">Trip Details</div>
-      <a href="/home" className="text-[#334155]">
-        <XIcon className="h-6 w-6" />
-      </a>
-    </header>
+  /* ----------------------------------------------------------------------- */
+  /*                                   UI                                    */
+  /* ----------------------------------------------------------------------- */
+  return (
+    <div className="min-h-screen bg-white flex flex-col text-slate-800">
+      {/* ── Header ────────────────────────────────────────────────────────── */}
+      <header className="sticky top-0 z-10 bg-white border-b shadow-sm p-3 md:p-4 flex items-center justify-between">
+        <div className="text-xl md:text-2xl font-bold text-[#00A99D]">
+          Trip Details
+        </div>
+        <a href="/home" className="text-[#334155]">
+          <XIcon className="h-6 w-6" />
+        </a>
+      </header>
 
-    {/* Trip Details */}
-    <div className="max-w-7xl mx-auto w-full px-4 py-6">
-      <motion.div
-        layout
-        className="border rounded-xl overflow-hidden shadow-lg bg-white"
-      >
-        {/* Responsive image height */}
-        <img
-          src={trip.images[0].imageUrl}
-          alt={trip.title}
-          className="w-full h-56 sm:h-64 md:h-80 lg:h-[28rem] object-cover"
-        />
+      {/* ── Trip Card ─────────────────────────────────────────────────────── */}
+      <div className="max-w-7xl mx-auto w-full px-4 py-6">
+        <motion.div
+          layout
+          className="border rounded-xl overflow-hidden shadow-lg bg-white"
+        >
+          <img
+            src={trip.images[0]?.imageUrl}
+            alt={trip.title}
+            className="w-full h-56 sm:h-64 md:h-80 lg:h-[28rem] object-cover"
+          />
 
-        <div className="p-4 md:p-6">
-          <h1 className="text-xl md:text-2xl font-bold text-slate-800">{trip.title}</h1>
-          <p className="text-sm text-slate-600 mb-1 md:mb-2">{trip.region}</p>
-          <p className="text-sm md:text-base text-slate-500 mb-4">{trip.description}</p>
+          <div className="p-4 md:p-6">
+            {/* Title & basic info */}
+            <h1 className="text-xl md:text-2xl font-bold text-slate-800">
+              {trip.title}
+            </h1>
+            <p className="text-sm text-slate-600 mb-1 md:mb-2">
+              {trip.region}
+            </p>
+            <p className="text-sm md:text-base text-slate-500 mb-4">
+              {trip.description}
+            </p>
 
-          <div className="flex flex-wrap gap-2 text-xs md:text-sm text-white mb-4">
-            <span className="bg-[#334155] px-2 py-1 rounded">{trip.difficulty}</span>
-            <span className="bg-[#334155] px-2 py-1 rounded">{trip.durationInDays} Days</span>
-            <span className="bg-[#334155] px-2 py-1 rounded">₹{trip.price}</span>
-            <span className="bg-[#334155] px-2 py-1 rounded">{trip.type}</span>
-          </div>
+            {/* Tags row */}
+            <div className="flex flex-wrap gap-2 text-xs md:text-sm text-white mb-4">
+              <span className="bg-[#334155] px-2 py-1 rounded">
+                {trip.difficulty}
+              </span>
+              <span className="bg-[#334155] px-2 py-1 rounded">
+                {trip.durationInDays} Days
+              </span>
+              <span className="bg-[#334155] px-2 py-1 rounded">
+                ₹{trip.price}
+              </span>
+              <span className="bg-[#334155] px-2 py-1 rounded">{trip.type}</span>
+            </div>
 
-          {/* Itinerary */}
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">Itinerary</h2>
-          <ul className="list-disc list-inside space-y-1 mb-6">
-            {trip.itinerary.map((item) => (
-              <li key={item._id} className="text-sm md:text-base text-slate-600">
-                <span className="font-medium">{item.day}</span> – {item.time}: {item.description}
-              </li>
-            ))}
-          </ul>
+            {/* Itinerary */}
+            <h2 className="text-lg font-semibold text-slate-800 mb-2">
+              Itinerary
+            </h2>
+            <ul className="list-disc list-inside space-y-1 mb-6">
+              {trip.itinerary.map((item) => (
+                <li
+                  key={item._id}
+                  className="text-sm md:text-base text-slate-600"
+                >
+                  <span className="font-medium">{item.day}</span> – {item.time}:{" "}
+                  {item.description}
+                </li>
+              ))}
+            </ul>
 
-          {/* Included */}
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">Included</h2>
-          <ul className="list-disc list-inside space-y-1 mb-6">
-            {trip.included.map((item, idx) => (
-              <li key={idx} className="text-sm md:text-base text-slate-600">{item}</li>
-            ))}
-          </ul>
+            {/* Included */}
+            <h2 className="text-lg font-semibold text-slate-800 mb-2">
+              Included
+            </h2>
+            <ul className="list-disc list-inside space-y-1 mb-6">
+              {trip.included.map((inc, i) => (
+                <li key={i} className="text-sm md:text-base text-slate-600">
+                  {inc}
+                </li>
+              ))}
+            </ul>
 
-          {/* Excluded */}
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">Excluded</h2>
-          <ul className="list-disc list-inside space-y-1 mb-6">
-            {trip.excluded.map((item, idx) => (
-              <li key={idx} className="text-sm md:text-base text-slate-600">{item}</li>
-            ))}
-          </ul>
+            {/* Excluded */}
+            <h2 className="text-lg font-semibold text-slate-800 mb-2">
+              Excluded
+            </h2>
+            <ul className="list-disc list-inside space-y-1 mb-6">
+              {trip.excluded.map((exc, i) => (
+                <li key={i} className="text-sm md:text-base text-slate-600">
+                  {exc}
+                </li>
+              ))}
+            </ul>
 
-          {/* Tags */}
-          <div>
+            {/* Tags */}
             <h2 className="text-lg font-semibold text-slate-800 mb-2">Tags</h2>
-            <div className="flex flex-wrap gap-2">
-              {trip.tags.map((tag, idx) => (
+            <div className="flex flex-wrap gap-2 mb-6">
+              {trip.tags.map((tag, i) => (
                 <span
-                  key={idx}
-                  className="bg-[#00A99D] text-white px-2 py-1 rounded text-xs md:text-sm"
+                  key={i}
+                  className="bg-[#979999] text-white px-2 py-1 rounded text-xs md:text-sm"
                 >
                   {tag}
                 </span>
               ))}
             </div>
+
+            {/* ── Book Trip Button ───────────────────────────────────────── */}
+            <button
+              onClick={() => navigate(`/book/${trip._id}`)}
+              className="w-full md:w-auto font-bold px-6 py-3 rounded bg-[#31d6cb] text-white text-sm md:text-base hover:bg-opacity-90 transition"
+            >
+              Book Trip
+            </button>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
+
+      {/* ── Footer ───────────────────────────────────────────────────────── */}
+      <footer className="bg-slate-100 border-t text-xs md:text-sm py-6 px-4 text-center text-slate-500">
+        © 2025 XploreNow. All rights reserved. | Follow us on{" "}
+        <a href="#" className="text-[#00A99D] underline">
+          Instagram
+        </a>
+      </footer>
     </div>
-
-    {/* Footer */}
-    <footer className="bg-slate-100 border-t text-xs md:text-sm py-6 px-4 text-center text-slate-500">
-      © 2025 XploreNow. All rights reserved. | Follow us on{" "}
-      <a href="#" className="text-[#00A99D] underline">
-        Instagram
-      </a>
-    </footer>
-  </div>
-);
-
-
+  );
 }
