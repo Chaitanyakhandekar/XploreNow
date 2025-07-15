@@ -198,7 +198,37 @@ const getAllAgencyBookings = asyncHandler(async (req,res)=>{        // verifyJWT
 
 })
 
+const canBookTickets = asyncHandler(async (req,res)=>{      // verifyJWT middleware
+
+    const totalTickets = Number(req.query.tickets)
+    const tripId = req.query.tripId
+
+    if(!tripId || !mongoose.Types.ObjectId.isValid(tripId)){
+        throw new ApiError(400,"Invalid TripID")
+    }
+
+    if(!totalTickets || totalTickets < 1){
+        throw new ApiError(400,"Tickets Count is Required.")
+    }
+
+    const trip = await Trip.findById(tripId)
+
+    if(!trip){
+        throw new ApiError(500,"Trip may have been removed or fully booked. Please refresh the page or explore other available trips.")
+    }
+
+    return res
+            .status(200)
+            .json({
+                canBook:(trip.currentParticipants + totalTickets) <= trip.maxParticipants ? true : false
+            })
+
+    
+
+})
+
 export {
     createBooking,
-    getAllAgencyBookings
+    getAllAgencyBookings,
+    canBookTickets
 }

@@ -4,10 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { api } from "../../api/api";          // ← your Axios instance
 import { LoaderIcon, XIcon } from "lucide-react";
+import TicketModal from "../../components/TicketModel";
 
-/* -------------------------------------------------------------------------- */
-/*                               Trip Details Page                            */
-/* -------------------------------------------------------------------------- */
+
 export default function TripDetailsPage() {
   // If you store tripId in the URL, use:  const { tripId } = useParams();
   const tripId = localStorage.getItem("tripId");
@@ -15,6 +14,7 @@ export default function TripDetailsPage() {
 
   const [loading, setLoading] = useState(true);
   const [trip, setTrip]     = useState(null);
+  const [isOpen , setIsOpen] = useState(false)
 
   /* Fetch trip details ----------------------------------------------------- */
   useEffect(() => {
@@ -31,6 +31,10 @@ export default function TripDetailsPage() {
     }
     fetchTripDetails();
   }, [tripId]);
+
+  const handleBooking = async ()=>{
+       setIsOpen(true)
+  }
 
   /* Loading / Error states ------------------------------------------------- */
   if (loading) {
@@ -49,9 +53,7 @@ export default function TripDetailsPage() {
     );
   }
 
-  /* ----------------------------------------------------------------------- */
-  /*                                   UI                                    */
-  /* ----------------------------------------------------------------------- */
+  
   return (
     <div className="min-h-screen bg-white flex flex-col text-slate-800">
       {/* ── Header ────────────────────────────────────────────────────────── */}
@@ -63,6 +65,8 @@ export default function TripDetailsPage() {
           <XIcon className="h-6 w-6" />
         </a>
       </header>
+
+      <TicketModal isOpen={isOpen} setIsOpen={setIsOpen}/>
 
       {/* ── Trip Card ─────────────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto w-full px-4 py-6">
@@ -157,7 +161,7 @@ export default function TripDetailsPage() {
 
             {/* ── Book Trip Button ───────────────────────────────────────── */}
             <button
-              onClick={() => navigate(`/book/${trip._id}`)}
+              onClick={handleBooking}
               className="w-full md:w-auto font-bold px-6 py-3 rounded bg-[#31d6cb] text-white text-sm md:text-base hover:bg-opacity-90 transition"
             >
               Book Trip

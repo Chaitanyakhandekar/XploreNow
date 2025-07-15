@@ -13,16 +13,9 @@ const createOrder = asyncHandler(async (req, res) => {
   const trip = await Trip.findById(tripId)
 
   if(!trip){
-    return res.status(400).json({error:" Trip may have been removed or fully booked. Please refresh the page or explore other available trips."})
+    return res.status(400).json({error:"Trip may have been removed or fully booked. Please refresh the page or explore other available trips."})
   }
 
-  const isAlreadyBooked = await Booking.findOne({
-      userId:req.user._id
-  })
-
-  if(isAlreadyBooked){
-     return res.status(401).json({error:"Already Booked"})
-  }
 
   if((trip.currentParticipants + totalBookings) > trip.maxParticipants){
     return res.status(200).json({error:"Unable to complete your booking. The requested number of participants exceeds the available slots for this trip."})
