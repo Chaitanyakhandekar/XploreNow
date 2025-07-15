@@ -5,16 +5,20 @@ import { motion } from "framer-motion";
 import { api } from "../../api/api";          // ← your Axios instance
 import { LoaderIcon, XIcon } from "lucide-react";
 import TicketModal from "../../components/TicketModel";
+import { useSelector, useDispatch } from "react-redux";
+
 
 
 export default function TripDetailsPage() {
   // If you store tripId in the URL, use:  const { tripId } = useParams();
-  const tripId = localStorage.getItem("tripId");
+  const tripData = useSelector((state)=>state.trip);
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const [trip, setTrip]     = useState(null);
   const [isOpen , setIsOpen] = useState(false)
+  const [tripId,setTripId] = useState(localStorage.getItem("tripId"))
+
 
   /* Fetch trip details ----------------------------------------------------- */
   useEffect(() => {
@@ -31,6 +35,8 @@ export default function TripDetailsPage() {
     }
     fetchTripDetails();
   }, [tripId]);
+
+  
 
   const handleBooking = async ()=>{
        setIsOpen(true)

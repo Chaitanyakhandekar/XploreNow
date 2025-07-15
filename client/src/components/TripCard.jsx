@@ -2,9 +2,41 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router";
 import { Button } from "./Button";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import {  setTripData } from "../store/slices/tripSlice";
+import { api } from "../api/api";
 
 export const TripCard = ({ trip }) => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const tripData = useSelector(state=>state.trip)
+
+    const viewDetails = async(tripId)=>{
+      console.log(tripId)
+      const response = await api
+                              .get(`/trips/get-user/${tripId}`) 
+                              .then((res)=>{
+                                console.log({
+                                  tripId:res.data.data._id,
+                                  tripAmount:res.data.data.price,
+                                  totalBookings:0
+                                })
+                                dispatch(setTripData({
+                                  tripId:res.data.data._id,
+                                  tripAmount:res.data.data.price,
+                                  totalBookings:0
+                                }))
+
+                              })
+                              
+                              // 
+      console.log(tripData)
+      localStorage.setItem("tripId",trip._id)
+      localStorage.setItem("tripAmount",trip.price)
+      localStorage.setItem("totalBookings",0)
+
+      navigate( `/view-details/${tripId}`)
+    }
   return (
     <motion.div
     layout
@@ -35,10 +67,7 @@ export const TripCard = ({ trip }) => {
         {trip.currentParticipants} / {trip.maxParticipants} Participants
       </div>
       <Button
-            onClick={()=>{
-                localStorage.setItem("tripId",trip._id)
-               navigate( `/view-details/${trip._id}`)
-            }}
+            onClick={()=>viewDetails(trip._id)}
             className="block mt-3 w-full text-sm px-4 py-2 rounded bg-[#00A99D] text-white text-center hover:bg-opacity-90"
             >
             View Details

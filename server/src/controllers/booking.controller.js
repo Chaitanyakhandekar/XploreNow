@@ -220,7 +220,8 @@ const canBookTickets = asyncHandler(async (req,res)=>{      // verifyJWT middlew
     return res
             .status(200)
             .json({
-                canBook:(trip.currentParticipants + totalTickets) <= trip.maxParticipants ? true : false
+                canBook:(trip.currentParticipants + totalTickets) <= trip.maxParticipants ? true : false,
+                seatsLeft:trip.maxParticipants - trip.currentParticipants
             })
 
     
