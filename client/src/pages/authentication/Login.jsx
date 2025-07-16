@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import { api } from "../../api/api";
 import toast from "react-hot-toast";
+import Swal from 'sweetalert2';
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -38,6 +39,16 @@ export default function Login() {
       const response = await axios
         .post("/api/v1/users/login", form)
         .then((response) => {
+          Swal.fire({
+            title: 'Logged In Successfully.',
+            text: `Welcome Back to XploreNow.`,
+            icon: 'success',
+            confirmButtonText: 'Ok',
+            timer: 2000,
+            showConfirmButton: false,
+            position: 'top-end',
+            toast: true
+          });
           navigate("/home");
         })
         .catch((response) => {
@@ -54,11 +65,11 @@ export default function Login() {
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#00A99D] via-[#00C4B8] to-[#00D4C7]"></div>
         <div className="absolute inset-0 bg-black/10"></div>
-        
+
         {/* Decorative Elements */}
         <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
         <div className="absolute bottom-20 right-20 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
-        
+
         <div className="relative z-10 flex flex-col justify-center px-12 text-white">
           <div className="mb-8">
             <div className="flex items-center space-x-3 mb-6">
@@ -74,7 +85,7 @@ export default function Login() {
               Discover breathtaking destinations, book unforgettable experiences, and create memories that last a lifetime.
             </p>
           </div>
-          
+
           <div className="space-y-4">
             <div className="flex items-center space-x-3 text-white/80">
               <Shield className="w-5 h-5" />
@@ -120,9 +131,8 @@ export default function Login() {
                   Email address
                 </label>
                 <div className="relative">
-                  <div className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-colors duration-200 ${
-                    focusedField === 'email' ? 'text-[#00A99D]' : 'text-slate-400'
-                  }`}>
+                  <div className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-colors duration-200 ${focusedField === 'email' ? 'text-[#00A99D]' : 'text-slate-400'
+                    }`}>
                     <Mail className="h-5 w-5" />
                   </div>
                   <input
@@ -133,8 +143,8 @@ export default function Login() {
                     onFocus={() => setFocusedField('email')}
                     onBlur={() => setFocusedField(null)}
                     className={`w-full pl-10 pr-4 py-3 border-2 rounded-xl transition-all duration-200 bg-white/50 backdrop-blur-sm
-                      ${errors.email 
-                        ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' 
+                      ${errors.email
+                        ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
                         : 'border-slate-200 focus:border-[#00A99D] focus:ring-[#00A99D]/20'
                       } focus:outline-none focus:ring-4`}
                     placeholder="Enter your email"
@@ -154,9 +164,8 @@ export default function Login() {
                   Password
                 </label>
                 <div className="relative">
-                  <div className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-colors duration-200 ${
-                    focusedField === 'password' ? 'text-[#00A99D]' : 'text-slate-400'
-                  }`}>
+                  <div className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-colors duration-200 ${focusedField === 'password' ? 'text-[#00A99D]' : 'text-slate-400'
+                    }`}>
                     <Lock className="h-5 w-5" />
                   </div>
                   <input
@@ -167,8 +176,8 @@ export default function Login() {
                     onFocus={() => setFocusedField('password')}
                     onBlur={() => setFocusedField(null)}
                     className={`w-full pl-10 pr-12 py-3 border-2 rounded-xl transition-all duration-200 bg-white/50 backdrop-blur-sm
-                      ${errors.password 
-                        ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' 
+                      ${errors.password
+                        ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
                         : 'border-slate-200 focus:border-[#00A99D] focus:ring-[#00A99D]/20'
                       } focus:outline-none focus:ring-4`}
                     placeholder="Enter your password"
@@ -224,8 +233,8 @@ export default function Login() {
             <div className="mt-8 text-center">
               <p className="text-slate-600">
                 Don't have an account?{" "}
-                <a 
-                  href="/register" 
+                <a
+                  href="/register"
                   className="text-[#00A99D] hover:text-[#00948A] font-semibold transition-colors duration-200"
                 >
                   Create account

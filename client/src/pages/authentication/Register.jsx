@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowRight, Globe, Shield, Zap, CheckCircle } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import Swal from 'sweetalert2';
 import { api } from "../../api/api";
 
 export default function Register() {
@@ -46,7 +47,7 @@ export default function Register() {
     setLoading(true);
     try {
       const response = await api
-        .post("/api/v1/users/register", {
+        .post("/users/register", {
           username: form.username,
           fullName: form.name,
           email: form.email,
@@ -55,7 +56,18 @@ export default function Register() {
         })
         .then((response) => {
           console.log(response);
-          alert("User Registered Successfully");
+          
+          Swal.fire({
+                          title: 'Registered Successfully.',
+                          text: `You are now our Community Member`,
+                          icon: 'success',
+                          confirmButtonText: 'Ok',
+                          timer: 2000,
+                          showConfirmButton: false,
+                          position: 'top-end',
+                          toast: true
+                      });
+
           navigate("/login");
         })
         .catch((response) => {
