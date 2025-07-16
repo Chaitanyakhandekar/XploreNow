@@ -42,3 +42,42 @@ export function launchRazorpay({ orderId, amount, currency, onSuccess }) {
   };
   new window.Razorpay(options).open();
 }
+
+
+export const verifyPayment = async (res)=>{
+
+  const payload = {
+          razorpay_order_id:res?.razorpay_order_id || localStorage.getItem("orderId"),
+          razorpay_payment_id:res?.razorpay_payment_id || localStorage.getItem("paymentId"),
+          razorpay_signature:res?.razorpay_signature || localStorage.getItem("signature"),
+          amountPaid:localStorage.getItem("tripAmount"),
+          paymentMode:"razorpay",
+          tripId:localStorage.getItem("tripId"),
+          totalBookings:localStorage.getItem("totalBookings"),
+        }
+
+  try {
+
+      const response = await api.post("/payments/razorpay/verify",payload)
+      console.log(response)
+
+      if(response.data.success===true){
+        return {
+          success:true,
+          message:"Payment Verified."
+        }
+      }
+
+      return {
+          success:false,
+          message:"Payment Unverified."
+        }
+  } catch (error) {
+
+    return {
+          success:false,
+          message:error.message
+        }
+  }
+
+}

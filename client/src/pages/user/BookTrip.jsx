@@ -3,7 +3,8 @@ import { useSelector } from "react-redux";
 import {
   loadRazorpayScript,
   createOrder,
-  launchRazorpay
+  launchRazorpay,
+  verifyPayment
 } from "../../services/razorpay";
 
 export  function BookTrip() {
@@ -41,9 +42,13 @@ export  function BookTrip() {
       /* 3. launch Razorpay */
       launchRazorpay({
         ...order,
-        onSuccess: (res) => {
+        onSuccess: async(res) => {
           console.log("✅ Payment success", res);
-          // TODO: verify signature with backend
+          localStorage.setItem("orderId",res.razorpay_order_id)
+          localStorage.setItem("paymentId",res.razorpay_payment_id)
+          localStorage.setItem("signature",res.razorpay_signature)
+          
+          await verifyPayment(res)
         }
       });
     })();
