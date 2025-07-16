@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   loadRazorpayScript,
@@ -8,6 +8,7 @@ import {
 } from "../../services/razorpay";
 import {useNavigate} from "react-router"
 import Swal from 'sweetalert2';
+import { Loader } from "../../components/Loader";
 
 export  function BookTrip() {
   // Grab trip data from Redux (or props)
@@ -15,6 +16,7 @@ export  function BookTrip() {
   const tripId = localStorage.getItem("tripId")
   const tripAmount = localStorage.getItem("tripAmount")
   const totalBookings = localStorage.getItem("totalBookings")
+  const [loading,setLoading] = useState(true)
   useEffect(() => {
     if (!tripId) return; // nothing to pay for
 
@@ -25,6 +27,9 @@ export  function BookTrip() {
       } catch (err) {
         alert(err.message);
         return;
+      }
+      finally{
+        setLoading(false)
       }
 
       /* 2. create order on backend */
@@ -74,5 +79,5 @@ export  function BookTrip() {
   }, [tripId, tripAmount, totalBookings]);
 
   // This component only triggers the popup, no UI needed
-  return null;
+  return loading && <Loader/>;
 }

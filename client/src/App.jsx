@@ -12,12 +12,14 @@ import "@fontsource/inter/600.css";
 import "@fontsource/poppins/400.css";
 import "@fontsource/poppins/600.css";
 import "@fontsource/poppins/700.css";
+import { Loader } from "./components/Loader.jsx";
 
 
 export default function App() {
   return (
     <Routes>
       {/* public */}
+      <Route path="/"  element={<Loader   />} />
       <Route path="/register"       element={<Register />} />
       <Route path="/login"  element={<Login   />} />
 
