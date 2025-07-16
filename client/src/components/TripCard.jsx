@@ -174,7 +174,7 @@ export const TripCard = ({ trip }) => {
 
         {/* Action Button */}
         <div
-          className={`w-full py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl text-center ${
+          className={`w-full py-1 px-2 rounded-xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl text-center ${
             isFull 
               ? 'bg-slate-300 text-slate-500 cursor-not-allowed' 
               : 'bg-gradient-to-r from-[#00A99D] to-[#00D4AA] hover:from-[#00D4AA] hover:to-[#00A99D] text-white hover:shadow-[#00A99D]/25'

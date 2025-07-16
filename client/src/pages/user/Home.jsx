@@ -194,7 +194,7 @@ export default function ExplorePage() {
                   onClick={() => setShowNotifications(!showNotifications)}
                   className="relative p-3 bg-white/90 backdrop-blur-sm border border-slate-200/50 text-slate-700 hover:bg-slate-50 rounded-xl shadow-lg shadow-slate-900/5 hover:shadow-xl transition-all duration-300"
                 >
-                  <BellIcon className="h-5 w-5" />
+                  <BellIcon className="h-5 w-5 text-red-500 font-bold" />
                   {unreadCount > 0 && (
                     <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center">
                       <span className="text-xs font-bold text-white">{unreadCount}</span>
@@ -258,7 +258,7 @@ export default function ExplorePage() {
                   <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
                     <UserIcon className="h-4 w-4 text-white" />
                   </div>
-                  <span className="hidden sm:inline font-medium">Profile</span>
+                  <span className="hidden sm:inline  text-gray-400 font-bold">Profile</span>
                 </Button>
 
                 {/* Profile Dropdown */}

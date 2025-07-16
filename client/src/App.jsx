@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import TripDetailsPage from "./pages/user/TripDetailsPage.jsx";
 import {BookTrip} from "./pages/user/BookTrip"
 import TicketModal from "./components/TicketModel.jsx";
+import Profile from "./pages/user/Profile.jsx";
 import "@fontsource/inter/300.css";
 import "@fontsource/inter/600.css";
 import "@fontsource/poppins/400.css";
@@ -27,6 +28,7 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route path="/home" element={<Home/>} />
         <Route path="/view-details/:tripId" element={<TripDetailsPage/>} />
+        <Route path="/profile" element={<Profile/>} />
       <Route path="/book-trip" element={<BookTrip/>} />
         
       </Route>
