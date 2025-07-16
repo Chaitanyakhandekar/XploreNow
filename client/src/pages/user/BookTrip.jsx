@@ -6,10 +6,12 @@ import {
   launchRazorpay,
   verifyPayment
 } from "../../services/razorpay";
+import {useNavigate} from "react-router"
+import Swal from 'sweetalert2';
 
 export  function BookTrip() {
   // Grab trip data from Redux (or props)
-  
+  const navigate = useNavigate()
   const tripId = localStorage.getItem("tripId")
   const tripAmount = localStorage.getItem("tripAmount")
   const totalBookings = localStorage.getItem("totalBookings")
@@ -48,7 +50,24 @@ export  function BookTrip() {
           localStorage.setItem("paymentId",res.razorpay_payment_id)
           localStorage.setItem("signature",res.razorpay_signature)
           
-          await verifyPayment(res)
+          const paymentStatus = await verifyPayment(res)
+
+          if(paymentStatus.success===true){
+
+            Swal.fire({
+                title: 'Payment Successfull.',
+                text: `You are now Trip Member`,
+                icon: 'success',
+                confirmButtonText: 'Ok',
+                timer: 2000,
+                showConfirmButton: false,
+                position: 'top-end',
+                toast: true
+            });
+
+            navigate("/home")
+          }
+          
         }
       });
     })();
