@@ -70,7 +70,7 @@ export  function BookTrip() {
                 toast: true
             });
 
-            navigate("/home")
+            navigate("/explore")
           }
           
         }
