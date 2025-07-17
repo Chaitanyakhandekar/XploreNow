@@ -547,21 +547,26 @@ const getUserTrips = asyncHandler(async (req,res)=>{        // verifyJWT middlew
                 from:"trips",
                 localField:"tripId",
                 foreignField:"_id",
-                as:"trips"
+                as:"trip",          // only one trip for one each document
+                
             }
         },
         {
-            $project:{
-                myTrips:"$trips"
+            $unwind:"$trip"
+        },
+        {
+            $replaceRoot:{
+                newRoot:"$trip"
             }
         }
+
     ])
 
     if(!userTrips.length){
         throw new ApiError(500,"Database Search Error")
     }
 
-    userTrips = userTrips[0]
+    
 
     return res
             .status(200)
