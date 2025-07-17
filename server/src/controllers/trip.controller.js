@@ -509,6 +509,76 @@ const getTripByIdForUser = asyncHandler(async (req, res) => { // verifyJWT, midd
         );
 });
 
+const getUserTrips = asyncHandler(async (req,res)=>{        // verifyJWT middleware
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10
+    const skip = (page - 1) * limit
+
+    const totalTrips = await Booking.countDocuments({
+        userId:req.user._id
+    })
+
+    if(totalTrips===0){
+        return res
+                .status(200)
+                .json(
+                    new ApiResponse(200,[],"You Haven't Booked Trips Yet.")
+                )
+    }
+
+    let userTrips = await Booking.aggregate([
+        {
+            $match:{
+                userId:new mongoose.Types.ObjectId(req.user._id)
+            }
+        },
+        {
+            $sort:{createdAt:-1}
+        },
+        {
+            $skip:skip
+        },
+        {
+            $limit:limit
+        },
+        {
+            $lookup:{
+                from:"trips",
+                localField:"tripId",
+                foreignField:"_id",
+                as:"trips"
+            }
+        },
+        {
+            $project:{
+                myTrips:"$trips"
+            }
+        }
+    ])
+
+    if(!userTrips.length){
+        throw new ApiError(500,"Database Search Error")
+    }
+
+    userTrips = userTrips[0]
+
+    return res
+            .status(200)
+            .json(
+                new ApiResponse(200,{
+                    userTrips,
+                    page,
+                    limit,
+                    totalTrips,
+                    totalPages:Math.ceil(totalTrips / limit),
+                    hasMore: page * limit < totalTrips
+                },
+                "User Trips Fetched Successfully.")
+            )
+
+})
+
 export {
     createTrip,
     updateTrip,
@@ -517,5 +587,6 @@ export {
     getAllAgencyTrips,
     getAllPublicTrips,
     getAllTripParticipants,
-    getTripByIdForUser
+    getTripByIdForUser,
+    getUserTrips
 }
