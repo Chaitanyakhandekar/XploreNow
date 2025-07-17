@@ -49,7 +49,7 @@ export default function Login() {
             position: 'top-end',
             toast: true
           });
-          navigate("/home");
+          navigate("/explore");
         })
         .catch((response) => {
           alert(response.response.data.split("Error:")[1].split("</pre>")[0]);
