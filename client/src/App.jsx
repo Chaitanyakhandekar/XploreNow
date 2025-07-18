@@ -8,6 +8,7 @@ import TripDetailsPage from "./pages/user/TripDetailsPage.jsx";
 import {BookTrip} from "./pages/user/BookTrip"
 import TicketModal from "./components/TicketModel.jsx";
 import Profile from "./pages/user/Profile.jsx";
+import MyTripsPage from "./pages/user/MyTrips.jsx";
 import Intro from "./pages/user/Intro.jsx"
 import "@fontsource/inter/300.css";
 import "@fontsource/inter/600.css";
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/view-details/:tripId" element={<TripDetailsPage/>} />
         <Route path="/profile" element={<Profile/>} />
       <Route path="/book-trip" element={<BookTrip/>} />
+      <Route path="/my-trips" element={<MyTripsPage/>} />
         
       </Route>
     </Routes>
