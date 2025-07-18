@@ -17,7 +17,7 @@ server.use(express.static("public"))
 server.use(cookieParser())
 
 cron.schedule("*/10 * * * *", async () => {
-    console.log("CRON JOB is RUNNING")
+    console.log("CRON JOB IS RUNNING FOR UPDATING TRIP STATUS")
     await updateTripsStatus()
 })
 
