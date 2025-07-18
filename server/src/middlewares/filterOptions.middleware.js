@@ -13,13 +13,15 @@ export const filterOptions = asyncHandler(async (req,res,next)=>{      // verify
         category,
         minPrice,
         maxPrice,
-        tags
+        tags,
+        status
     } = req.query
 
     let filterQuery = {}
 
     const addFeilds = ()=>{
         if(type) filterQuery.type = type
+        if(status) filterQuery.status = status
         if(difficulty) filterQuery.difficulty = difficulty
         if(category) filterQuery.category = category
          if (tags) {

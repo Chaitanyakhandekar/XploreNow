@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setTripData } from "../store/slices/tripSlice";
 import { api } from "../api/api";
 
-export const TripCard = ({ trip }) => {
+export const TripCard = ({ trip , index }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const tripData = useSelector(state => state.trip);
