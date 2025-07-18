@@ -485,7 +485,7 @@ export default function ExplorePage() {
                     <h1 className="text-3xl font-bold text-slate-800">
                       Discover Amazing Trips
                     </h1>
-                    <div className="bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700 px-4 py-2 rounded-full text-sm font-semibold border border-emerald-200">
+                    <div className="bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700  px-1 py-2 text-center w-[40%] rounded-full text-sm font-semibold border border-emerald-200">
                       {filteredTrips.length} results
                     </div>
                   </div>

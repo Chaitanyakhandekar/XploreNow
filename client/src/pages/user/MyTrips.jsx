@@ -6,17 +6,19 @@ import {
   BookmarkIcon, CreditCardIcon, MessageSquareIcon, ShieldCheckIcon, AwardIcon,
   PlusIcon, EditIcon, TrashIcon, EyeIcon, ShareIcon, DownloadIcon, 
   MapPinIcon, ClockIcon, UsersIcon, StarIcon, CheckCircleIcon, 
-  AlertCircleIcon, PlayIcon, PauseIcon, DollarSignIcon, CameraIcon
+  AlertCircleIcon, PlayIcon, PauseIcon, DollarSignIcon, CameraIcon,ListIcon
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { api } from "../../api/api";
+import { TripCard } from "../../components/TripCard";
 
 // Mock API functions (replace with your actual API)
 const mockApi = {
   get: (url) => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        if (url === "/trips/user/") {
+        if (url === "/trips/user-trips/") {
           resolve({
             data: {
               data: {
@@ -167,7 +169,8 @@ export default function MyTripsPage() {
   useEffect(() => {
     const fetchTrips = async () => {
       try {
-        const response = await mockApi.get("/trips/user/");
+        const response = await api.get("/trips/user-trips/");
+        console.log(response.data)
         setTrips(response.data.data.userTrips);
         setFilteredTrips(response.data.data.userTrips);
       } catch (error) {
@@ -210,7 +213,7 @@ export default function MyTripsPage() {
     // Apply sorting
     switch (sortBy) {
       case "alphabetical":
-        filtered.sort((a, b) => a.title.localeCompare(b.title));
+        filtered.sort((a, b) => b.title.localeCompare(a.title));
         break;
       case "price":
         filtered.sort((a, b) => b.price - a.price);
@@ -282,105 +285,105 @@ export default function MyTripsPage() {
     { icon: ShieldCheckIcon, label: "Privacy", href: "/privacy" },
   ];
 
-  const TripCard = ({ trip, index }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
-      className="bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-lg shadow-slate-900/5 overflow-hidden hover:shadow-xl hover:shadow-slate-900/10 transition-all duration-300 group"
-    >
-      <div className="relative">
-        <img 
-          src={trip.image} 
-          alt={trip.title}
-          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-        <div className="absolute top-4 left-4">
-          <div className={`px-3 py-1 rounded-full text-xs font-semibold border flex items-center gap-1 ${getStatusColor(trip.status)}`}>
-            {getStatusIcon(trip.status)}
-            {trip.status.charAt(0).toUpperCase() + trip.status.slice(1)}
-          </div>
-        </div>
-        <div className="absolute top-4 right-4">
-          <div className="flex gap-2">
-            <button className="p-2 bg-white/90 backdrop-blur-sm rounded-full hover:bg-white transition-colors shadow-lg">
-              <ShareIcon className="h-4 w-4 text-slate-600" />
-            </button>
-            <button className="p-2 bg-white/90 backdrop-blur-sm rounded-full hover:bg-white transition-colors shadow-lg">
-              <DownloadIcon className="h-4 w-4 text-slate-600" />
-            </button>
-          </div>
-        </div>
-        {trip.status === "completed" && trip.rating > 0 && (
-          <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1">
-            <StarIcon className="h-4 w-4 text-yellow-500 fill-current" />
-            <span className="text-sm font-semibold text-slate-700">{trip.rating}</span>
-          </div>
-        )}
-      </div>
+  // const TripCard = ({ trip, index }) => (
+  //   <motion.div
+  //     initial={{ opacity: 0, y: 20 }}
+  //     animate={{ opacity: 1, y: 0 }}
+  //     transition={{ delay: index * 0.1 }}
+  //     className="bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-lg shadow-slate-900/5 overflow-hidden hover:shadow-xl hover:shadow-slate-900/10 transition-all duration-300 group"
+  //   >
+  //     <div className="relative">
+  //       <img 
+  //         src={trip.images[0].imageUrl} 
+  //         alt={trip.title}
+  //         className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+  //       />
+  //       <div className="absolute top-4 left-4">
+  //         <div className={`px-3 py-1 rounded-full text-xs font-semibold border flex items-center gap-1 ${getStatusColor(trip.status)}`}>
+  //           {getStatusIcon(trip.status)}
+  //           {trip.status.charAt(0).toUpperCase() + trip.status.slice(1)}
+  //         </div>
+  //       </div>
+  //       <div className="absolute top-4 right-4">
+  //         <div className="flex gap-2">
+  //           <button className="p-2 bg-white/90 backdrop-blur-sm rounded-full hover:bg-white transition-colors shadow-lg">
+  //             <ShareIcon className="h-4 w-4 text-slate-600" />
+  //           </button>
+  //           <button className="p-2 bg-white/90 backdrop-blur-sm rounded-full hover:bg-white transition-colors shadow-lg">
+  //             <DownloadIcon className="h-4 w-4 text-slate-600" />
+  //           </button>
+  //         </div>
+  //       </div>
+  //       {trip.status === "completed" && trip.rating > 0 && (
+  //         <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1">
+  //           <StarIcon className="h-4 w-4 text-yellow-500 fill-current" />
+  //           <span className="text-sm font-semibold text-slate-700">{trip.rating}</span>
+  //         </div>
+  //       )}
+  //     </div>
       
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex-1">
-            <h3 className="text-xl font-bold text-slate-800 mb-1 line-clamp-1">{trip.title}</h3>
-            <div className="flex items-center gap-1 text-slate-600 mb-2">
-              <MapPinIcon className="h-4 w-4" />
-              <span className="text-sm">{trip.destination}</span>
-            </div>
-          </div>
-          <div className="text-right">
-            <div className="text-2xl font-bold text-emerald-600">${trip.price}</div>
-            <div className="text-xs text-slate-500">per person</div>
-          </div>
-        </div>
+  //     <div className="p-6">
+  //       <div className="flex items-start justify-between mb-3">
+  //         <div className="flex-1">
+  //           <h3 className="text-xl font-bold text-slate-800 mb-1 line-clamp-1">{trip.title}</h3>
+  //           <div className="flex items-center gap-1 text-slate-600 mb-2">
+  //             <MapPinIcon className="h-4 w-4" />
+  //             <span className="text-sm">{trip.destination}</span>
+  //           </div>
+  //         </div>
+  //         <div className="text-right">
+  //           <div className="text-2xl font-bold text-emerald-600">${trip.price}</div>
+  //           <div className="text-xs text-slate-500">per person</div>
+  //         </div>
+  //       </div>
         
-        <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
-          <div className="flex items-center gap-1 text-slate-600">
-            <CalendarIcon className="h-4 w-4" />
-            <span>{trip.duration}</span>
-          </div>
-          <div className="flex items-center gap-1 text-slate-600">
-            <UsersIcon className="h-4 w-4" />
-            <span>{trip.participants} people</span>
-          </div>
-          <div className="flex items-center gap-1 text-slate-600">
-            <ClockIcon className="h-4 w-4" />
-            <span>{new Date(trip.startDate).toLocaleDateString()}</span>
-          </div>
-        </div>
+  //       <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
+  //         <div className="flex items-center gap-1 text-slate-600">
+  //           <CalendarIcon className="h-4 w-4" />
+  //           <span>{trip.duration}</span>
+  //         </div>
+  //         <div className="flex items-center gap-1 text-slate-600">
+  //           <UsersIcon className="h-4 w-4" />
+  //           <span>{trip.participants} people</span>
+  //         </div>
+  //         <div className="flex items-center gap-1 text-slate-600">
+  //           <ClockIcon className="h-4 w-4" />
+  //           <span>{new Date(trip.startDate).toLocaleDateString()}</span>
+  //         </div>
+  //       </div>
         
-        <p className="text-slate-600 text-sm mb-4 line-clamp-2">{trip.description}</p>
+  //       <p className="text-slate-600 text-sm mb-4 line-clamp-2">{trip.description}</p>
         
-        <div className="flex flex-wrap gap-2 mb-4">
-          {trip.activities.slice(0, 3).map((activity, idx) => (
-            <span key={idx} className="bg-slate-100 text-slate-700 px-2 py-1 rounded-full text-xs font-medium">
-              {activity}
-            </span>
-          ))}
-          {trip.activities.length > 3 && (
-            <span className="bg-slate-100 text-slate-700 px-2 py-1 rounded-full text-xs font-medium">
-              +{trip.activities.length - 3} more
-            </span>
-          )}
-        </div>
+  //       {/* <div className="flex flex-wrap gap-2 mb-4">
+  //         {trip.activities.slice(0, 3).map((activity, idx) => (
+  //           <span key={idx} className="bg-slate-100 text-slate-700 px-2 py-1 rounded-full text-xs font-medium">
+  //             {activity}
+  //           </span>
+  //         ))}
+  //         {trip.activities.length > 3 && (
+  //           <span className="bg-slate-100 text-slate-700 px-2 py-1 rounded-full text-xs font-medium">
+  //             +{trip.activities.length - 3} more
+  //           </span>
+  //         )}
+  //       </div> */}
         
-        <div className="flex gap-2">
-          <button className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white py-2 px-4 rounded-xl font-semibold transition-all duration-300 shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/30">
-            <EyeIcon className="h-4 w-4 inline mr-2" />
-            View Details
-          </button>
-          <button className="p-2 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
-            <EditIcon className="h-4 w-4 text-slate-600" />
-          </button>
-          {trip.status === "upcoming" && (
-            <button className="p-2 bg-red-50 hover:bg-red-100 rounded-xl transition-colors">
-              <TrashIcon className="h-4 w-4 text-red-600" />
-            </button>
-          )}
-        </div>
-      </div>
-    </motion.div>
-  );
+  //       <div className="flex gap-2">
+  //         <button className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white py-2 px-4 rounded-xl font-semibold transition-all duration-300 shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/30">
+  //           <EyeIcon className="h-4 w-4 inline mr-2" />
+  //           View Details
+  //         </button>
+  //         <button className="p-2 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
+  //           <EditIcon className="h-4 w-4 text-slate-600" />
+  //         </button>
+  //         {trip.status === "upcoming" && (
+  //           <button className="p-2 bg-red-50 hover:bg-red-100 rounded-xl transition-colors">
+  //             <TrashIcon className="h-4 w-4 text-red-600" />
+  //           </button>
+  //         )}
+  //       </div>
+  //     </div>
+  //   </motion.div>
+  // );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex flex-col text-slate-900 font-[Inter]">
@@ -507,10 +510,10 @@ export default function MyTripsPage() {
             <div className="flex items-center gap-3">
               <Link
                 to="/explore"
-                className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300"
+                className="flex items-center lg:text-md  gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300"
               >
-                <PlusIcon className="h-5 w-5" />
-                Book New Trip
+                <PlusIcon className="lg:h-5 lg:w-5 sm:h-10 sm:w-10" />
+                <p className="lg:block hidden">Book New Trip</p>
               </Link>
             </div>
           </div>
@@ -559,17 +562,45 @@ export default function MyTripsPage() {
             <div className="flex items-center gap-2">
               <span className="text-sm text-slate-600">
                 {filteredTrips.length} trips found
-              </span>
+                           </span>
+              <button
+                onClick={() =>
+                  setViewMode(viewMode === "grid" ? "list" : "grid")
+                }
+                className="p-2 bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-xl shadow-lg hover:bg-slate-100 transition-all duration-300"
+              >
+                {viewMode === "grid" ? (
+                  <ListIcon className="h-4 w-4 text-slate-600" />
+                ) : (
+                  <GridIcon className="h-4 w-4 text-slate-600" />
+                )}
+              </button>
             </div>
           </div>
         </div>
 
-               {/* Trip Grid */}
-        {!loading && filteredTrips.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredTrips.map((trip, index) => (
-              <TripCard key={trip._id} trip={trip} index={index} />
-            ))}
+        {/* Trip List */}
+        {loading ? (
+          <div className="flex justify-center items-center min-h-[200px]">
+            <LoaderIcon className="animate-spin w-8 h-8 text-emerald-600" />
+          </div>
+        ) : filteredTrips.length === 0 ? (
+          <div className="text-center py-20 text-slate-500 text-lg">
+            No trips found matching your filters.
+          </div>
+        ) : (
+          <div
+            className={`grid ${
+              viewMode === "grid"
+                ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                : "grid-cols-1 gap-4"
+            }`}
+          >
+            <AnimatePresence>
+              {filteredTrips.map((trip, index) => (
+                <TripCard key={index} trip={trip} index={index} />
+              ))}
+            </AnimatePresence>
           </div>
         )}
       </div>
