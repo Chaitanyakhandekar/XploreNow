@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Hero3D from '../../components/Hero3D';
 import { 
   ChevronRight, 
   Search, 
@@ -15,12 +14,14 @@ import {
   Menu,
   X
 } from 'lucide-react';
-import { useNavigate } from 'react-router';
 
 const XploreNowLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const navigate = useNavigate()
+
+  const navigate = (path) => {
+    console.log('Navigate to:', path);
+  };
 
   useEffect(() => {
     setIsVisible(true);
@@ -56,7 +57,7 @@ const XploreNowLanding = () => {
                 <a href="#features" className="text-slate-600 hover:text-teal-500 transition-colors">Features</a>
                 <a href="#agencies" className="text-slate-600 hover:text-teal-500 transition-colors">For Agencies</a>
                 <button 
-                onClick={()=>navigate("/register")}
+                onClick={() => navigate("/register")}
                 className="bg-teal-500 text-white px-6 py-2 rounded-full hover:bg-teal-600 transition-colors">
                   Get Started
                 </button>
@@ -82,7 +83,7 @@ const XploreNowLanding = () => {
               <a href="#features" className="block px-3 py-2 text-slate-600 hover:text-teal-500">Features</a>
               <a href="#agencies" className="block px-3 py-2 text-slate-600 hover:text-teal-500">For Agencies</a>
               <button 
-              onClick={()=>navigate("/register")}
+              onClick={() => navigate("/register")}
               className="w-full text-left bg-teal-500 text-white px-3 py-2 rounded-md hover:bg-teal-600">
                 Get Started
               </button>
@@ -91,67 +92,67 @@ const XploreNowLanding = () => {
         )}
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative pt-20 pb-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-teal-50 to-slate-50"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div style={fadeInUp}>
-                <h1 className="text-5xl lg:text-6xl font-bold text-slate-800 leading-tight">
-                  Discover India's
-                  <span className="text-teal-500 block">Hidden Adventures</span>
-                </h1>
-                <p className="text-xl text-slate-600 mt-6 leading-relaxed">
-                  Connect with verified travel agencies and embark on curated treks and trips across India. 
-                  From Sahyadri peaks to Northeast valleys – your next adventure awaits.
-                </p>
-              </div>
-              
-              <div style={staggerDelay(1)} className="flex flex-col sm:flex-row gap-4">
-                <button 
-                onClick={()=>navigate("/register")}
-                className="bg-teal-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-teal-600 transition-all transform hover:scale-105 flex items-center justify-center">
-                  Explore Adventures
-                  <ChevronRight className="ml-2" size={20} />
-                </button>
-                <button
-                onClick={()=>navigate("/register-agency")}
-                className="border-2 border-slate-300 text-slate-700 px-8 py-4 rounded-full font-semibold hover:border-teal-500 hover:text-teal-500 transition-all">
-                  List Your Agency
-                </button>
-              </div>
-              
-              <div style={staggerDelay(2)} className="flex items-center space-x-8 text-sm text-slate-600">
-                <div className="flex items-center">
-                  <Shield className="text-teal-500 mr-2" size={16} />
-                  Verified Agencies
-                </div>
-                <div className="flex items-center">
-                  <Users className="text-teal-500 mr-2" size={16} />
-                  10k+ Adventurers
-                </div>
-                <div className="flex items-center"> 
-                  <MapPin className="text-teal-500 mr-2" size={16} />
-                  All India Coverage
-                </div>
-              </div>
+      {/* Hero Section with Background Image */}
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center scale-x-[-1] bg-no-repeat"
+          style={{
+            backgroundImage: 'url("https://i.pinimg.com/1200x/82/3a/4d/823a4d3cc7940987d42e629260ea7657.jpg")'
+          }}
+        >
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/40"></div>
+        </div>
+        
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-3xl">
+            <div style={fadeInUp}>
+              <h1 className="text-5xl lg:text-7xl font-bold text-white leading-tight mb-6">
+                Discover India's
+                <span className="text-teal-400 block">Hidden Adventures</span>
+              </h1>
+              <p className="text-xl lg:text-2xl text-white/90 leading-relaxed mb-8 max-w-2xl">
+                Connect with verified travel agencies and embark on curated treks and trips across India. 
+                From Sahyadri peaks to Northeast valleys – your next adventure awaits.
+              </p>
             </div>
             
-            <div style={staggerDelay(3)} className="relative">
-              <div className="bg-gradient-to-br from-teal-100 to-slate-100 rounded-3xl p-8 h-96 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-32 h-32 bg-teal-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Globe className="text-white" size={48} />
-                  </div>
-                  {/* <p className="text-slate-600 font-medium"><Hero3D/></p> */}
-                  <p className="text-slate-500 text-sm mt-2">Interactive adventure showcase</p>
-                </div>
+            <div style={staggerDelay(1)} className="flex flex-col sm:flex-row gap-4 mb-8">
+              <button 
+              onClick={() => navigate("/register")}
+              className="bg-teal-500 text-white px-10 py-5 rounded-full font-semibold hover:bg-teal-600 transition-all transform hover:scale-105 flex items-center justify-center text-lg shadow-xl">
+                Explore Adventures
+                <ChevronRight className="ml-2" size={24} />
+              </button>
+              <button
+              onClick={() => navigate("/register-agency")}
+              className="border-2 border-white/80 text-white px-10 py-5 rounded-full font-semibold hover:bg-white hover:text-slate-800 transition-all text-lg backdrop-blur-sm">
+                List Your Agency
+              </button>
+            </div>
+            
+            <div style={staggerDelay(2)} className="flex flex-col sm:flex-row sm:items-center sm:space-x-8 space-y-4 sm:space-y-0 text-white/90">
+              <div className="flex items-center">
+                <Shield className="text-teal-400 mr-3" size={20} />
+                <span className="font-medium">Verified Agencies</span>
               </div>
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-teal-500 rounded-full opacity-20"></div>
-              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-slate-400 rounded-full opacity-20"></div>
+              <div className="flex items-center">
+                <Users className="text-teal-400 mr-3" size={20} />
+                <span className="font-medium">10k+ Adventurers</span>
+              </div>
+              <div className="flex items-center"> 
+                <MapPin className="text-teal-400 mr-3" size={20} />
+                <span className="font-medium">All India Coverage</span>
+              </div>
             </div>
           </div>
+        </div>
+        
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/70 animate-bounce">
+          <ChevronRight className="rotate-90" size={24} />
         </div>
       </section>
 
@@ -404,12 +405,12 @@ const XploreNowLanding = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button 
-            onClick={()=>navigate("/register")}
+            onClick={() => navigate("/register")}
             className="bg-white text-teal-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-50 transition-colors">
               Explore Adventures Now
             </button>
             <button 
-            onClick={()=>navigate("/register-agency")}
+            onClick={() => navigate("/register-agency")}
             className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-teal-600 transition-colors">
               List Your Agency
             </button>

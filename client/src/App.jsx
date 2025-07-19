@@ -23,7 +23,7 @@ export default function App() {
   return (
     <Routes>
       {/* public */}
-      <Route path="/"  element={<Dashboard />} />
+      <Route path="/"  element={<Intro />} />
       <Route path="/register"       element={<Register />} />
       <Route path="/login"  element={<Login   />} />
 
