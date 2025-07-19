@@ -11,6 +11,7 @@ import jwt from "jsonwebtoken"
 import { Agency } from "../models/agency.model.js";
 import { Booking } from "../models/booking.model.js";
 
+
 const createTrip = asyncHandler(async (req,res)=>{      // verifyJWTAgency middleware
 
     const {
@@ -564,13 +565,21 @@ const getUserTrips = asyncHandler(async (req,res)=>{        // verifyJWT , filte
         throw new ApiError(500,"Database Search Error")
     }
 
-    
+    let set = new Set()
+
+    const finalTrips = userTrips.filter((trip)=>{
+        
+        if(set.has(trip._id.toString())) return false;
+        set.add(trip._id.toString())
+        return true
+        
+})
 
     return res
             .status(200)
             .json(
                 new ApiResponse(200,{
-                    userTrips,
+                    userTrips:finalTrips,
                     page,
                     limit,
                     totalTrips,

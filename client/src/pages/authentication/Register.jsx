@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowRight, Globe, Shield, Zap, CheckCircle } from "lucide-react";
+import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowRight, Globe, ShieldCheck , Zap, CheckCircle } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import Swal from 'sweetalert2';
@@ -113,22 +113,42 @@ export default function Register() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 flex">
       {/* Left Panel - Hero Section */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#00A99D] via-[#00C4B8] to-[#00D4C7]"></div>
-        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="absolute inset-0"></div>
+        <div className="absolute inset-0 bg-black"></div>
         
         {/* Decorative Elements */}
         <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
         <div className="absolute bottom-20 right-20 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
+
+
+         <div 
+    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-60"
+    style={{
+      backgroundImage: 'url(https://i.pinimg.com/736x/d0/b7/6d/d0b76d22c5929d06a1880d092bd395ce.jpg)'
+    }}
+  ></div>
+
+  {/* Mirror Reflection */}
+  <div 
+    className="absolute inset-x-0 bottom-[-100%] h-full bg-cover bg-center bg-no-repeat opacity-20 scale-y-[-1] blur-sm"
+    style={{
+      backgroundImage: 'url(https://i.pinimg.com/736x/d0/b7/6d/d0b76d22c5929d06a1880d092bd395ce.jpg)'
+    }}
+  ></div>
+
+  {/* Optional fade overlay on reflection to make it more realistic */}
+  <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-white/30 via-white/10 to-transparent"></div>
+
         
         <div className="relative z-10 flex flex-col justify-center px-12 text-white">
           <div className="mb-8">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                <Globe className="w-6 h-6" />
+             <div className="w-12 h-12  rounded-xl flex items-center justify-center  bg-teal-500">
+                <Globe className="w-6 h-6 " />
               </div>
-              <span className="text-2xl font-bold">XploreNow</span>
+              <span className="text-2xl text-white font-bold flex">Xplore<p className="text-teal-500">Now</p></span>
             </div>
-            <h1 className="text-4xl font-bold mb-4 leading-tight">
+            <h1 className="text-4xl font-bold mb-4 leading-tight text-[#2aa89d]">
               Start your adventure journey today
             </h1>
             <p className="text-xl text-white/90 leading-relaxed">
@@ -138,15 +158,15 @@ export default function Register() {
           
           <div className="space-y-4">
             <div className="flex items-center space-x-3 text-white/80">
-              <CheckCircle className="w-5 h-5" />
+              <CheckCircle className="w-5 h-5 text-green-500" />
               <span>Verified travel experiences</span>
             </div>
             <div className="flex items-center space-x-3 text-white/80">
-              <Shield className="w-5 h-5" />
+              <ShieldCheck className="w-5 h-5 text-green-500" />
               <span>100% secure payments</span>
             </div>
             <div className="flex items-center space-x-3 text-white/80">
-              <Zap className="w-5 h-5" />
+              <Zap className="w-5 h-5 text-orange-300" />
               <span>24/7 customer support</span>
             </div>
           </div>

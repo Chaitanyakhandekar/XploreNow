@@ -13,123 +13,6 @@ import { Link } from "react-router-dom";
 import { api } from "../../api/api";
 import { TripCard } from "../../components/TripCard";
 
-// Mock API functions (replace with your actual API)
-const mockApi = {
-  get: (url) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        if (url === "/trips/user-trips/") {
-          resolve({
-            data: {
-              data: {
-                userTrips: [
-                  {
-                    _id: "1",
-                    title: "Magical Bali Adventure",
-                    destination: "Bali, Indonesia",
-                    type: "adventure",
-                    difficulty: "moderate",
-                    region: "Asia",
-                    price: 1299,
-                    duration: "7 days",
-                    status: "upcoming",
-                    startDate: "2025-08-15",
-                    endDate: "2025-08-22",
-                    image: "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?w=400&h=300&fit=crop",
-                    participants: 4,
-                    rating: 4.8,
-                    bookingDate: "2025-07-01",
-                    description: "Explore ancient temples, pristine beaches, and vibrant culture",
-                    activities: ["Temple visits", "Beach relaxation", "Cultural tours", "Adventure sports"]
-                  },
-                  {
-                    _id: "2",
-                    title: "Swiss Alps Expedition",
-                    destination: "Interlaken, Switzerland",
-                    type: "adventure",
-                    difficulty: "challenging",
-                    region: "Europe",
-                    price: 2499,
-                    duration: "10 days",
-                    status: "completed",
-                    startDate: "2025-06-01",
-                    endDate: "2025-06-11",
-                    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-                    participants: 2,
-                    rating: 4.9,
-                    bookingDate: "2025-04-15",
-                    description: "Breathtaking mountain views and thrilling adventures",
-                    activities: ["Hiking", "Paragliding", "Mountain climbing", "Photography"]
-                  },
-                  {
-                    _id: "3",
-                    title: "Tokyo Cultural Discovery",
-                    destination: "Tokyo, Japan",
-                    type: "cultural",
-                    difficulty: "easy",
-                    region: "Asia",
-                    price: 1899,
-                    duration: "5 days",
-                    status: "ongoing",
-                    startDate: "2025-07-10",
-                    endDate: "2025-07-15",
-                    image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop",
-                    participants: 3,
-                    rating: 4.7,
-                    bookingDate: "2025-05-20",
-                    description: "Immerse yourself in Japanese culture and traditions",
-                    activities: ["Temple visits", "Sushi making", "City tours", "Shopping"]
-                  },
-                  {
-                    _id: "4",
-                    title: "Santorini Sunset Romance",
-                    destination: "Santorini, Greece",
-                    type: "relaxation",
-                    difficulty: "easy",
-                    region: "Europe",
-                    price: 1699,
-                    duration: "6 days",
-                    status: "cancelled",
-                    startDate: "2025-09-01",
-                    endDate: "2025-09-07",
-                    image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=400&h=300&fit=crop",
-                    participants: 2,
-                    rating: 0,
-                    bookingDate: "2025-06-10",
-                    description: "Romantic getaway with stunning sunsets and luxury",
-                    activities: ["Beach relaxation", "Wine tasting", "Sunset viewing", "Spa treatments"]
-                  },
-                  {
-                    _id: "5",
-                    title: "Amazon Rainforest Explorer",
-                    destination: "Manaus, Brazil",
-                    type: "adventure",
-                    difficulty: "challenging",
-                    region: "South America",
-                    price: 2199,
-                    duration: "8 days",
-                    status: "upcoming",
-                    startDate: "2025-10-15",
-                    endDate: "2025-10-23",
-                    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop",
-                    participants: 6,
-                    rating: 4.6,
-                    bookingDate: "2025-07-05",
-                    description: "Deep jungle exploration and wildlife encounters",
-                    activities: ["Wildlife watching", "Jungle trekking", "River cruises", "Indigenous culture"]
-                  }
-                ]
-              }
-            }
-          });
-        } else if (url === "/users/logout") {
-          resolve({ data: { success: true } });
-        }
-      }, 1000);
-    });
-  }
-};
-
 export default function MyTripsPage() {
   const [loading, setLoading] = useState(true);
   const [trips, setTrips] = useState([]);
@@ -192,6 +75,7 @@ export default function MyTripsPage() {
       }
     });
   }, [trips]);
+
 
   // Filter and sort trips
   useEffect(() => {
