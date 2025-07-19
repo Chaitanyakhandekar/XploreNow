@@ -16,13 +16,14 @@ import "@fontsource/poppins/400.css";
 import "@fontsource/poppins/600.css";
 import "@fontsource/poppins/700.css";
 import { Loader } from "./components/Loader.jsx";
+import Dashboard from "./pages/agency/Dashboard.jsx";
 
 
 export default function App() {
   return (
     <Routes>
       {/* public */}
-      <Route path="/"  element={<Intro />} />
+      <Route path="/"  element={<Dashboard />} />
       <Route path="/register"       element={<Register />} />
       <Route path="/login"  element={<Login   />} />
 

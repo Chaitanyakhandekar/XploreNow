@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Hero3D from '../../components/Hero3D';
 import { 
   ChevronRight, 
   Search, 
@@ -130,7 +131,7 @@ const XploreNowLanding = () => {
                   <Users className="text-teal-500 mr-2" size={16} />
                   10k+ Adventurers
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center"> 
                   <MapPin className="text-teal-500 mr-2" size={16} />
                   All India Coverage
                 </div>
@@ -143,7 +144,7 @@ const XploreNowLanding = () => {
                   <div className="w-32 h-32 bg-teal-500 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Globe className="text-white" size={48} />
                   </div>
-                  <p className="text-slate-600 font-medium">3D Hero Video/Animation</p>
+                  {/* <p className="text-slate-600 font-medium"><Hero3D/></p> */}
                   <p className="text-slate-500 text-sm mt-2">Interactive adventure showcase</p>
                 </div>
               </div>
