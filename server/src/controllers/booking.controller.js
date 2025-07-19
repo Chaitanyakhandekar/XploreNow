@@ -228,8 +228,105 @@ const canBookTickets = asyncHandler(async (req,res)=>{      // verifyJWT middlew
 
 })
 
+const getUserBookings = asyncHandler(async (req,res)=>{     // verifyJWT middleware
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10
+    const skip = (page - 1) * limit
+
+    const totalBookings = await Booking.countDocuments({
+        userId:req.user._id
+    })
+
+    if(totalBookings===0){
+        return res
+                .status(200)
+                .json(
+                    new ApiResponse(200,[],"You Haven't Booked Trips Yet.")
+                )
+    }
+
+    const userBookings = await Booking.aggregate([
+        {
+            $match:{
+                userId:new mongoose.Types.ObjectId(req.user._id)
+            }
+        },
+        {
+            $sort:{createdAt:-1}
+        },
+        {
+            $skip:skip
+        },
+        {
+            $limit:limit
+        },
+        {
+            $lookup:{
+                from:"trips",
+                localField:"tripId",
+                foreignField:"_id",
+                as:"trip",
+                pipeline:[
+                    {
+                        $project:{
+                            _id:1,
+                            title:1,
+                            location:1,
+                            startDate:1,
+                            durationInDays:1,
+                            images:1
+                        }
+                    }
+                ]
+            }
+        },
+        {
+         $unwind:"$trip"
+        },
+        {
+            $project:{
+                bookingId:"$_id" ,
+                tripId:"$trip._id" ,
+                tripTitle: "$trip.title",
+                thumbnailImage: "$trip.images[0].imageUrl",
+                location: "$trip.location", 
+                duration: "$trip.durationInDays",
+                bookingDate: "$createdAt",
+                travelDate: "$trip.startDate",
+                numPeople: "$participants",
+                totalAmount: "$amountPaid",
+                status: "$status",
+                paymentStatus: "$paymentStatus"
+
+            }
+        }
+    ])
+
+    if(!userBookings.length){
+        throw new ApiError(500,"Server Error")
+    }
+
+     return res
+            .status(200)
+            .json(
+                new ApiResponse(200,{
+                    userBookings,
+                    page,
+                    limit,
+                    totalBookings,
+                    totalPages:Math.ceil(totalBookings / limit),
+                    hasMore: page * limit < totalBookings
+                },
+                "User Bookings Fetched Successfully.")
+            )
+
+})
+
+
 export {
     createBooking,
     getAllAgencyBookings,
-    canBookTickets
+    canBookTickets,
+    getUserBookings
 }

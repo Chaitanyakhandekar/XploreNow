@@ -3,7 +3,8 @@ import
 {
     createBooking,
     getAllAgencyBookings,
-    canBookTickets
+    canBookTickets,
+    getUserBookings
 }
 from "../controllers/booking.controller.js"
 import { verifyJWT } from "../middlewares/verifyJWT.middleware.js";
@@ -14,5 +15,6 @@ const router = Router()
 router.route("/create-booking").post(verifyJWT,createBooking)
 router.route("/agency/all").get(verifyJWTAgency,getAllAgencyBookings)
 router.route("/can-book/").get(verifyJWT,canBookTickets)
+router.route("/user-bookings/").get(verifyJWT,getUserBookings)
 
 export default router;

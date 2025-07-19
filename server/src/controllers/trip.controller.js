@@ -591,6 +591,7 @@ const getUserTrips = asyncHandler(async (req,res)=>{        // verifyJWT , filte
 
 })
 
+
 export {
     createTrip,
     updateTrip,
@@ -600,5 +601,5 @@ export {
     getAllPublicTrips,
     getAllTripParticipants,
     getTripByIdForUser,
-    getUserTrips
+    getUserTrips,
 }
