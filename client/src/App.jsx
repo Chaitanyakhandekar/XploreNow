@@ -17,6 +17,7 @@ import "@fontsource/poppins/600.css";
 import "@fontsource/poppins/700.css";
 import { Loader } from "./components/Loader.jsx";
 import Dashboard from "./pages/agency/Dashboard.jsx";
+import MyBookings from "./pages/user/MyBookings.jsx";
 
 
 export default function App() {
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/profile" element={<Profile/>} />
       <Route path="/book-trip" element={<BookTrip/>} />
       <Route path="/my-trips" element={<MyTripsPage/>} />
+      <Route path="/bookings" element={<MyBookings/>} />
         
       </Route>
     </Routes>
