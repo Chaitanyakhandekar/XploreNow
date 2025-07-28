@@ -37,7 +37,7 @@ export default function Login() {
   const loginUser = async () => {
     try {
       const response = await axios
-        .post("/api/v1/users/login", form)
+        .post("https://xplorenow.onrender.com/api/v1/users/login", form)
         .then((response) => {
           Swal.fire({
             title: 'Logged In Successfully.',
