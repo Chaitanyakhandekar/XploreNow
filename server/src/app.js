@@ -7,7 +7,7 @@ import { updateTripsStatus } from "./cron/updateTripsStatus.js"
 const server = express()
 
 server.use(cors({
-    origin:process.env.ALLOW_ORIGIN || "*",
+    origin:"https://xplorenow.onrender.com",
     credentials:true
 }))
 
