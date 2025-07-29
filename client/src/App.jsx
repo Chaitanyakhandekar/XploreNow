@@ -10,11 +10,11 @@ import TicketModal from "./components/TicketModel.jsx";
 import Profile from "./pages/user/Profile.jsx";
 import MyTripsPage from "./pages/user/MyTrips.jsx";
 import Intro from "./pages/user/Intro.jsx"
-import "@fontsource/inter/300.css";
-import "@fontsource/inter/600.css";
-import "@fontsource/poppins/400.css";
-import "@fontsource/poppins/600.css";
-import "@fontsource/poppins/700.css";
+// import "@fontsource/inter/300.css";
+// import "@fontsource/inter/600.css";
+// import "@fontsource/poppins/400.css";
+// import "@fontsource/poppins/600.css";
+// import "@fontsource/poppins/700.css";
 import { Loader } from "./components/Loader.jsx";
 import Dashboard from "./pages/agency/Dashboard.jsx";
 import MyBookings from "./pages/user/MyBookings.jsx";

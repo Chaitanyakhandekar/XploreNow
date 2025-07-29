@@ -1,0 +1,28 @@
+4. send email after successfull trip booking/payment receipt and trip details
+
+1. automate trip status according to start and end date 
+2. send notification to trip members/users after updating startDate,endDate,price,maxParticipants,location,difficulty,type,included,excluded,itinerary
+
+
+
+3. 🔐 4. Transactional Safety (Optional but Ideal)
+Use MongoDB Transactions (only available in replica sets) to make the booking and trip update atomic:
+        const session = await mongoose.startSession();
+        session.startTransaction();
+
+        try {
+        // create booking
+        // update trip
+        await session.commitTransaction();
+        } catch (error) {
+        await session.abortTransaction();
+        throw error;
+        } finally {
+        session.endSession();
+        }
+
+
+
+
+**********  add key= _id to myTrips card
+**********  add pagination in filtering trips ************
