@@ -7,8 +7,8 @@ import { updateTripsStatus } from "./cron/updateTripsStatus.js"
 const server = express()
 
 server.use(cors({
-    origin: "*",
-    credentials:false
+    origin: process.env.ALLOW_ORIGIN || "http://localhost:5173",
+    credentials:true
 }))
 
 server.use(express.json({limit:"16kb"}))
