@@ -334,7 +334,7 @@ const getCurrentUser =  asyncHandler(async (req,res)=>{
                 new ApiResponse(200,{
                 _id:user._id,
                 role:user.role
-            },"fdf")
+            },"Authoenticated User Fetched Successfully")
             )
 
 })

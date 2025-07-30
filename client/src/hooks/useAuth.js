@@ -8,7 +8,7 @@ export const useAuth = ()=>{
     useEffect(()=>{
 
         api
-            .get("/users/me")
+            .get("https://xplorenow.onrender.com/api/v1/users/me")
             .then((res)=>{
                 setUser(res.data.data)})
             .catch(()=>setUser(null))
