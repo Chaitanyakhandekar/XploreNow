@@ -5,15 +5,15 @@ export const useAuth = ()=>{
     const [user,setUser] = useState(null)
     const [loading,setLoading] = useState(true)
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        api
-            .get("/users/me")
-            .then((res)=>{
-                setUser(res.data.data)})
-            .catch(()=>setUser(null))
-            .finally(()=>setLoading(false))
-    },[])
+    //     api
+    //         .get("/users/me")
+    //         .then((res)=>{
+    //             setUser(res.data.data)})
+    //         .catch(()=>setUser(null))
+    //         .finally(()=>setLoading(false))
+    // },[])
     console.log(user)
     return {user , loading}
 } 
