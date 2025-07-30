@@ -9,7 +9,7 @@ const server = express()
 server.use(cors({
   origin: [
     "https://xplore-now.vercel.app", 
-    "https://xplorenow.onrender.com"
+    // "https://xplorenow.onrender.com"
   ],
   credentials: true
 }));

@@ -7,6 +7,6 @@ export default defineConfig({
     proxy: {
       '/api': "https://xplorenow.onrender.com"
     },
-    historyApiFallback: true,
+    // historyApiFallback: true,
   }
 })
