@@ -43,7 +43,7 @@ export default function ExplorePage() {
     const fetchTrips = async () => {
       try {
         const response = await api
-                                .get("https://xplorenow.onrender.com/api/v1/trips/all")
+                                .get("/trips/all")
                                 .then((res)=>{
                                     console.log(res.data.data.allTrips)
                                     setTrips(res.data.data.allTrips);
