@@ -5,12 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': {
-        target: 'https://xplorenow.onrender.com',
-        changeOrigin: true,
-        secure: false,
-        ws: true,
-      }
+      '/api': "https://xplorenow.onrender.com"
     },
     historyApiFallback: true,
   }
