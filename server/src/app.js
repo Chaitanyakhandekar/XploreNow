@@ -7,10 +7,11 @@ import { updateTripsStatus } from "./cron/updateTripsStatus.js"
 const server = express()
 
 server.use(cors({
-    origin: ["http://localhost:5173", "https://your-frontend-domain.com"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+  origin: [
+    "https://xplore-now.vercel.app", 
+    "https://xplorenow.onrender.com"
+  ],
+  credentials: true
 }));
 
 
