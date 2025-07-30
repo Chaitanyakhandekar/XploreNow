@@ -95,8 +95,8 @@ const loginUser = asyncHandler(async (req, res) => {
 
     return res
         .status(200)
-        .cookie("accessToken", accessToken, { ...httpOnlyCookie, sameSite: "None" })
-        .cookie("refreshToken", refreshToken, { ...httpOnlyCookie, sameSite: "None" })
+        .cookie("accessToken", accessToken, { ...httpOnlyCookie, sameSite: 'none' })
+        .cookie("refreshToken", refreshToken, { ...httpOnlyCookie, sameSite: 'none' })
         .json(
             new ApiResponse(200, {
                 username: user.username,
@@ -244,8 +244,8 @@ const updatePassword = asyncHandler(async (req,res)=>{      // verifyJWT middlew
 
     return res
             .status(200)
-            .cookie("accessToken",accessToken,{...httpOnlyCookie , sameSite:"None"})
-            .cookie("refreshToken",refreshToken,{...httpOnlyCookie , sameSite:"None"})
+            .cookie("accessToken",accessToken,{...httpOnlyCookie , sameSite:"none"})
+            .cookie("refreshToken",refreshToken,{...httpOnlyCookie , sameSite:"none"})
             .json(
                 new ApiResponse(200,null,"Password Updated Successfully")
             )
@@ -289,8 +289,8 @@ const refreshAccessToken = asyncHandler(async (req,res)=>{
 
     return res
             .status(200)
-            .cookie("accessToken",accessToken,{...httpOnlyCookie , sameSite:"None"})
-            .cookie("refreshToken",refreshToken,{...httpOnlyCookie , sameSite:"None"})
+            .cookie("accessToken",accessToken,{...httpOnlyCookie , sameSite:"none"})
+            .cookie("refreshToken",refreshToken,{...httpOnlyCookie , sameSite:"none"})
             .json(
                 new ApiResponse(200,null,"AccessToken Refreshed Successfully")
             )
