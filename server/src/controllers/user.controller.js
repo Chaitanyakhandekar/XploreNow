@@ -95,8 +95,8 @@ const loginUser = asyncHandler(async (req, res) => {
 
     return res
         .status(200)
-        .cookie("accessToken", accessToken, { ...httpOnlyCookie, sameSite: "Strict" })
-        .cookie("refreshToken", refreshToken, { ...httpOnlyCookie, sameSite: "Strict" })
+        .cookie("accessToken", accessToken, { ...httpOnlyCookie, sameSite: "None" })
+        .cookie("refreshToken", refreshToken, { ...httpOnlyCookie, sameSite: "None" })
         .json(
             new ApiResponse(200, {
                 username: user.username,
@@ -123,8 +123,8 @@ const logoutUser = asyncHandler(async (req, res) => {      // verifyJWT middlewa
 
     return res
         .status(200)
-        .clearCookie("accessToken", { ...httpOnlyCookie, sameSite: "Strict" })
-        .clearCookie("refreshToken", { ...httpOnlyCookie, sameSite: "Strict" })
+        .clearCookie("accessToken", { ...httpOnlyCookie, sameSite: "None" })
+        .clearCookie("refreshToken", { ...httpOnlyCookie, sameSite: "None" })
         .json(
             new ApiResponse(200, "Logout Successfull")
         )
@@ -244,8 +244,8 @@ const updatePassword = asyncHandler(async (req,res)=>{      // verifyJWT middlew
 
     return res
             .status(200)
-            .cookie("accessToken",accessToken,{...httpOnlyCookie , sameSite:"Strict"})
-            .cookie("refreshToken",refreshToken,{...httpOnlyCookie , sameSite:"Strict"})
+            .cookie("accessToken",accessToken,{...httpOnlyCookie , sameSite:"None"})
+            .cookie("refreshToken",refreshToken,{...httpOnlyCookie , sameSite:"None"})
             .json(
                 new ApiResponse(200,null,"Password Updated Successfully")
             )
@@ -289,8 +289,8 @@ const refreshAccessToken = asyncHandler(async (req,res)=>{
 
     return res
             .status(200)
-            .cookie("accessToken",accessToken,{...httpOnlyCookie , sameSite:"Strict"})
-            .cookie("refreshToken",refreshToken,{...httpOnlyCookie , sameSite:"Strict"})
+            .cookie("accessToken",accessToken,{...httpOnlyCookie , sameSite:"None"})
+            .cookie("refreshToken",refreshToken,{...httpOnlyCookie , sameSite:"None"})
             .json(
                 new ApiResponse(200,null,"AccessToken Refreshed Successfully")
             )
