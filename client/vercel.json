@@ -1,20 +1,5 @@
 {
-  "version": 2,
   "rewrites": [
-    {
-      "source": "/api/v1/(.*)",
-      "destination": "https://xplorenow.onrender.com/api/v1/$1"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PUT,DELETE,OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "X-Requested-With, Content-Type, Authorization" },
-        { "key": "Access-Control-Allow-Credentials", "value": "true" }
-      ]
-    }
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
