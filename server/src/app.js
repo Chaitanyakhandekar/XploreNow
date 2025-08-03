@@ -6,6 +6,9 @@ import { updateTripsStatus } from "./cron/updateTripsStatus.js"
 
 const server = express()
 
+server.set('trust proxy', 1);
+
+
 server.use(cors({
   origin: [
     "https://xplore-now.vercel.app", 
