@@ -36,8 +36,8 @@ export default function Login() {
 
   const loginUser = async () => {
     try {
-      const response = await axios
-        .post("/api/v1/users/login", form)
+      const response = await api
+        .post("/users/login", form)
         .then((response) => {
           Swal.fire({
             title: 'Logged In Successfully.',
